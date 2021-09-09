@@ -1,1 +1,1 @@
-# codegym-laravel-tutorial
+# laravel-tutorial

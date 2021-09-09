@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "emallin.phpunit",
+        "higoka.php-cs-fixer",
+        "bmewburn.vscode-intelephense-client",
+        "esbenp.prettier-vscode"
+    ]
+}

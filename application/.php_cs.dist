@@ -1,0 +1,16 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__);
+
+return (new MattAllan\LaravelCodeStyle\Config())
+        ->setFinder($finder
+            ->exclude('bootstrap/cache')
+            ->exclude('storage/framework')
+
+        )
+        ->setRules([
+            '@Laravel' => true,
+            '@Laravel:risky' => true,
+        ])
+        ->setRiskyAllowed(true);
