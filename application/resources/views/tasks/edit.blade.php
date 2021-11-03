@@ -95,6 +95,17 @@
                         <x-input id="name" class="block mt-1 w-full {{ $errors->has('name') ? 'border-red-600' :'' }}" type="text" name="name" :value="old('name', $task->name)" placeholder="課題名" required autofocus />
                     </div>
                 </div>
+                
+                <!-- 作業中ここから -->
+                {{-- 左右のマージン0.25rem 最小サイズ768px,flexboxで横並び  下部のマージン1.5rem --}}
+                <div class="-mx-3 md:flex mb-6">
+                    {{-- 最小サイズ768px, 親要素の横幅いっぱい　下部のマージン1.5rem --}}
+                    <div class="md:w-full px-3 mb-6">
+                        <x-label for="task_status_id" :value="__('Task Status')" class="{{ $errors->has('task_status_id') ? 'text-red-600' :'' }}" />
+                        <x-select :options="$task_statuses" id="task_status_id" class="block mt-1 w-full {{ $errors->has('task_status_id') ? 'border-red-600' :'' }}" type="text" name="task_status_id" :value="old('task_status_id', $task->task_status_id)" required autofocus />
+                    </div>
+                </div>
+                <!-- 作業中ここまで -->
 
                 <div class="-mx-3 md:flex mb-6">
                     <div class="md:w-1/4 px-3 mb-6">
