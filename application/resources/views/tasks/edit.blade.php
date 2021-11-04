@@ -100,7 +100,7 @@
                 <div class="-mx-3 md:flex mb-6">
                     <div class="md:w-full px-3 mb-6">
                         <x-label for="task_detail" :value="__('Task Detail')" class="{{ $errors->has('task_detail') ? 'text-red-600' :'' }}" />
-                        <x-textarea :options="$task_statuses" id="task_detail" class="block mt-1 w-full {{ $errors->has('task_detail') ? 'border-red-600' :'' }}" type="text" name="task_detail" :value="old('task_detail', $task->task_status_id)" required autofocus />
+                        <x-textarea id="task_detail" class="block mt-1 w-full {{ $errors->has('task_detail') ? 'border-red-600' :'' }}" type="text" name="task_detail" :value="old('task_detail', $task->task_detail)" placeholder="課題の詳細" autofocus />
                     </div>
                 </div>
                 <!-- 作業中ここまで -->
