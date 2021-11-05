@@ -151,6 +151,7 @@ return [
         'name' => '名前',
         'keyword' => 'キーワード',
         'kind' => '種別',
+        'task_detail' => '課題の詳細',
         'status' => '状態',
         'assigner' => '担当者',
         'category' => 'カテゴリー',
