@@ -102,6 +102,7 @@ class TaskController extends Controller
         $request->validate([
             'task_kind_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'task_detail' => 'string|max:1000|nullable',
             'task_status_id' => 'required|integer',
             'assigner_id' => 'nullable|integer',
             'task_category_id' => 'nullable|integer',
@@ -113,6 +114,7 @@ class TaskController extends Controller
             'project_id' => $project->id,
             'task_kind_id' => $request->task_kind_id,
             'name' => $request->name,
+            'task_detail' => $request->task_detail,
             'task_status_id' => $request->task_status_id,
             'assigner_id' => $request->assigner_id,
             'task_category_id' => $request->task_category_id,
