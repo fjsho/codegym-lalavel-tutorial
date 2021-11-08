@@ -9,6 +9,7 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
 
 class TaskController extends Controller
 {
@@ -94,21 +95,23 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Http\Requests\StorePostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project)
+    public function store(StorePostRequest $request, Project $project)
     {
-        $request->validate([
-            'task_kind_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'task_detail' => 'string|max:1000|nullable',
-            'task_status_id' => 'required|integer',
-            'assigner_id' => 'nullable|integer',
-            'task_category_id' => 'nullable|integer',
-            'task_resolution_id' => 'nullable|integer',
-            'due_date' => 'nullable|date',
-        ]);
+        //以下のバリデーション処理は\app\Http\Requests\StorePostRequestに移行した
+        // $request->validate([
+        //     'task_kind_id' => 'required|integer',
+        //     'name' => 'required|string|max:255',
+        //     'task_detail' => 'string|max:1000|nullable',
+        //     'task_status_id' => 'required|integer',
+        //     'assigner_id' => 'nullable|integer',
+        //     'task_category_id' => 'nullable|integer',
+        //     'task_resolution_id' => 'nullable|integer',
+        //     'due_date' => 'nullable|date',
+        // ]);
+        $request->validated();
 
         if (Task::create([
             'project_id' => $project->id,
