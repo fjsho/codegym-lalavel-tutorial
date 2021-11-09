@@ -111,17 +111,17 @@ class TaskController extends Controller
         //     'task_resolution_id' => 'nullable|integer',
         //     'due_date' => 'nullable|date',
         // ]);
-        $request->validated();
+        $validated = $request->validated();
 
         if (Task::create([
             'project_id' => $project->id,
-            'task_kind_id' => $request->task_kind_id,
-            'name' => $request->name,
-            'task_detail' => $request->task_detail,
-            'task_status_id' => $request->task_status_id,
-            'assigner_id' => $request->assigner_id,
-            'task_category_id' => $request->task_category_id,
-            'due_date' => $request->due_date,
+            'task_kind_id' => $validated['task_kind_id'],
+            'name' => $validated['name'],
+            'task_detail' => $validated['task_detail'],
+            'task_status_id' => $validated['task_status_id'],
+            'assigner_id' => $validated['assigner_id'],
+            'task_category_id' => $validated['task_category_id'],
+            'due_date' => $validated['due_date'],
             'created_user_id' => $request->user()->id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
