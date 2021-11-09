@@ -9,7 +9,7 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\PostRequest;
 
 class TaskController extends Controller
 {
@@ -95,12 +95,12 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\StorePostRequest  $request
+     * @param  \app\Http\Requests\PostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request, Project $project)
+    public function store(PostRequest $request, Project $project)
     {
-        //以下のバリデーション処理は\app\Http\Requests\StorePostRequestに移行した
+        //以下のバリデーション処理は\app\Http\Requests\PostRequestに移行した
         // $request->validate([
         //     'task_kind_id' => 'required|integer',
         //     'name' => 'required|string|max:255',
