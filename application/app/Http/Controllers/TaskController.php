@@ -170,24 +170,43 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Http\Requests\PostRequest  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project, Task $task)
+    public function update(PostRequest $request, Project $project, Task $task)
     {
-        $request->validate([
-            'task_kind_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'task_detail' => 'string|max:1000|nullable',
-            'task_status_id' => 'required|integer',
-            'assigner_id' => 'nullable|integer',
-            'task_category_id' => 'nullable|integer',
-            'task_resolution_id' => 'nullable|integer',
-            'due_date' => 'nullable|date',
-        ]);
+        //以下のバリデーション処理は\app\Http\Requests\PostRequestに移行した
+        // $request->validate([
+        //     'task_kind_id' => 'required|integer',
+        //     'name' => 'required|string|max:255',
+        //     'task_detail' => 'string|max:1000|nullable',
+        //     'task_status_id' => 'required|integer',
+        //     'assigner_id' => 'nullable|integer',
+        //     'task_category_id' => 'nullable|integer',
+        //     'task_resolution_id' => 'nullable|integer',
+        //     'due_date' => 'nullable|date',
+        // ]);
 
-        if ($task->update($request->all())) {
+        //バリデーション処理及び'updated_user_id'への登録対応のため記述を修正
+        // if ($task->update($request->all())) {
+        //     $flash = ['success' => __('Task updated successfully.')];
+        // } else {
+        //     $flash = ['error' => __('Failed to update the task.')];
+        // }
+
+        $validated = $request->validated();
+
+        if ($task->update([
+            'task_kind_id' => $validated['task_kind_id'],
+            'name' => $validated['name'],
+            'task_detail' => $validated['task_detail'],
+            'task_status_id' => $validated['task_status_id'],
+            'assigner_id' => $validated['assigner_id'],
+            'task_category_id' => $validated['task_category_id'],
+            'due_date' => $validated['due_date'],
+            'updated_user_id' => $request->user()->id,
+        ])) {
             $flash = ['success' => __('Task updated successfully.')];
         } else {
             $flash = ['error' => __('Failed to update the task.')];
