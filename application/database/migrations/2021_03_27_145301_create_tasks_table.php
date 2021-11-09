@@ -77,4 +77,3 @@ class CreateTasksTable extends Migration
         Schema::dropIfExists('task_resolutions');
     }
 }
-
