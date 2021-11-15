@@ -100,17 +100,6 @@ class TaskController extends Controller
      */
     public function store(TaskStoreAndUpdateRequest $request, Project $project)
     {
-        //以下のバリデーション処理は\app\Http\Requests\TaskStoreAndUpdateRequestに移行した
-        // $request->validate([
-        //     'task_kind_id' => 'required|integer',
-        //     'name' => 'required|string|max:255',
-        //     'task_detail' => 'string|max:1000|nullable',
-        //     'task_status_id' => 'required|integer',
-        //     'assigner_id' => 'nullable|integer',
-        //     'task_category_id' => 'nullable|integer',
-        //     'task_resolution_id' => 'nullable|integer',
-        //     'due_date' => 'nullable|date',
-        // ]);
         $validated = $request->validated();
 
         if (Task::create([
@@ -176,25 +165,6 @@ class TaskController extends Controller
      */
     public function update(TaskStoreAndUpdateRequest $request, Project $project, Task $task)
     {
-        //以下のバリデーション処理は\app\Http\Requests\TaskStoreAndUpdateRequestに移行した
-        // $request->validate([
-        //     'task_kind_id' => 'required|integer',
-        //     'name' => 'required|string|max:255',
-        //     'task_detail' => 'string|max:1000|nullable',
-        //     'task_status_id' => 'required|integer',
-        //     'assigner_id' => 'nullable|integer',
-        //     'task_category_id' => 'nullable|integer',
-        //     'task_resolution_id' => 'nullable|integer',
-        //     'due_date' => 'nullable|date',
-        // ]);
-
-        //バリデーション処理及び'updated_user_id'への登録対応のため記述を修正
-        // if ($task->update($request->all())) {
-        //     $flash = ['success' => __('Task updated successfully.')];
-        // } else {
-        //     $flash = ['error' => __('Failed to update the task.')];
-        // }
-
         $validated = $request->validated();
 
         if ($task->update([
