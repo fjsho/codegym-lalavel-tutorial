@@ -52,7 +52,7 @@
                         <x-input id="name" class="block mt-1 w-full {{ $errors->has('name') ? 'border-red-600' :'' }}" type="text" name="name" :value="old('name')" placeholder="課題名" required autofocus />
                     </div>
                 </div>
-                
+
                 <!-- 作業中ここから -->
                 <div class="-mx-3 md:flex mb-6">
                     <div class="md:w-full px-3 mb-6">
@@ -61,7 +61,6 @@
                     </div>
                 </div>
                 <!-- 作業中ここまで -->
-
 
                 <div class="-mx-3 md:flex mb-6">
                     <div class="md:w-1/4 px-3 mb-6">
