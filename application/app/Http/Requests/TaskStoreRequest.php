@@ -29,7 +29,6 @@ class TaskStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //TaskController.phpから移行
             'task_kind_id' => 'required|integer',
             'name' => 'required|string|max:255',
             'task_detail' => 'string|max:1000|nullable',
