@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskStoreAndUpdateRequest extends FormRequest
+class TaskUpdateRequest extends FormRequest
 {
     /**
      * @overRide

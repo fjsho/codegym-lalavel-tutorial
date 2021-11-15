@@ -9,7 +9,8 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\TaskStoreAndUpdateRequest;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 
 class TaskController extends Controller
 {
@@ -95,10 +96,10 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\TaskStoreAndUpdateRequest  $request
+     * @param  \app\Http\Requests\TaskStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TaskStoreAndUpdateRequest $request, Project $project)
+    public function store(TaskStoreRequest $request, Project $project)
     {
         $validated = $request->validated();
 
@@ -159,11 +160,11 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \app\Http\Requests\TaskStoreAndUpdateRequest  $request
+     * @param  \app\Http\Requests\TaskUpdateRequest  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(TaskStoreAndUpdateRequest $request, Project $project, Task $task)
+    public function update(TaskUpdateRequest $request, Project $project, Task $task)
     {
         $validated = $request->validated();
 
