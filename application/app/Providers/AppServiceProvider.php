@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // \Illuminate\Foundation\Applicationで"validator"エイリアスを呼び出しそこから"replacer"メソッドを呼び出している
+        app()->validator->replacer('max',
+            function ($message, $attribute, $rule, $parameters) {
+                return str_replace(':max', number_format($parameters[0],0,","), $message);
+        });
     }
 }

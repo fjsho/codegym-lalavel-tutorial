@@ -9,6 +9,8 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 
 class TaskController extends Controller
 {
@@ -47,11 +49,11 @@ class TaskController extends Controller
             $tasks
                 ->where(function ($tasks) use ($keyword) {
                     $tasks
-                        ->where('search_task_kinds.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('projects.key', 'like', '%'.$keyword.'%')
-                        ->orWhere('tasks.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_assigner.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_users.name', 'like', '%'.$keyword.'%');
+                        ->where('search_task_kinds.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('projects.key', 'like', '%' . $keyword . '%')
+                        ->orWhere('tasks.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_assigner.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_users.name', 'like', '%' . $keyword . '%');
                 });
         }
         if ($request->has('assigner_id') && isset($assigner_id)) {
@@ -94,29 +96,22 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Http\Requests\TaskStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project)
+    public function store(TaskStoreRequest $request, Project $project)
     {
-        $request->validate([
-            'task_kind_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'task_status_id' => 'required|integer',
-            'assigner_id' => 'nullable|integer',
-            'task_category_id' => 'nullable|integer',
-            'task_resolution_id' => 'nullable|integer',
-            'due_date' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
         if (Task::create([
             'project_id' => $project->id,
-            'task_kind_id' => $request->task_kind_id,
-            'name' => $request->name,
-            'task_status_id' => $request->task_status_id,
-            'assigner_id' => $request->assigner_id,
-            'task_category_id' => $request->task_category_id,
-            'due_date' => $request->due_date,
+            'task_kind_id' => $validated['task_kind_id'],
+            'name' => $validated['name'],
+            'task_detail' => $validated['task_detail'],
+            'task_status_id' => $validated['task_status_id'],
+            'assigner_id' => $validated['assigner_id'],
+            'task_category_id' => $validated['task_category_id'],
+            'due_date' => $validated['due_date'],
             'created_user_id' => $request->user()->id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
@@ -165,23 +160,24 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Http\Requests\TaskUpdateRequest  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project, Task $task)
+    public function update(TaskUpdateRequest $request, Project $project, Task $task)
     {
-        $request->validate([
-            'task_kind_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'task_status_id' => 'required|integer',
-            'assigner_id' => 'nullable|integer',
-            'task_category_id' => 'nullable|integer',
-            'task_resolution_id' => 'nullable|integer',
-            'due_date' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
-        if ($task->update($request->all())) {
+        if ($task->update([
+            'task_kind_id' => $validated['task_kind_id'],
+            'name' => $validated['name'],
+            'task_detail' => $validated['task_detail'],
+            'task_status_id' => $validated['task_status_id'],
+            'assigner_id' => $validated['assigner_id'],
+            'task_category_id' => $validated['task_category_id'],
+            'due_date' => $validated['due_date'],
+            'updated_user_id' => $request->user()->id,
+        ])) {
             $flash = ['success' => __('Task updated successfully.')];
         } else {
             $flash = ['error' => __('Failed to update the task.')];

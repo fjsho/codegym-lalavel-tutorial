@@ -22,6 +22,7 @@ class Task extends Model
         'project_id',
         'name',
         'task_kind_id',
+        'task_detail',
         'task_status_id',
         'created_user_id',
         'updated_user_id',
