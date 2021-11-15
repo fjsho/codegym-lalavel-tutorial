@@ -9,7 +9,7 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\TaskStoreAndUpdateRequest;
 
 class TaskController extends Controller
 {
@@ -48,11 +48,11 @@ class TaskController extends Controller
             $tasks
                 ->where(function ($tasks) use ($keyword) {
                     $tasks
-                        ->where('search_task_kinds.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('projects.key', 'like', '%'.$keyword.'%')
-                        ->orWhere('tasks.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_assigner.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_users.name', 'like', '%'.$keyword.'%');
+                        ->where('search_task_kinds.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('projects.key', 'like', '%' . $keyword . '%')
+                        ->orWhere('tasks.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_assigner.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_users.name', 'like', '%' . $keyword . '%');
                 });
         }
         if ($request->has('assigner_id') && isset($assigner_id)) {
@@ -95,12 +95,12 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\PostRequest  $request
+     * @param  \app\Http\Requests\TaskStoreAndUpdateRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request, Project $project)
+    public function store(TaskStoreAndUpdateRequest $request, Project $project)
     {
-        //以下のバリデーション処理は\app\Http\Requests\PostRequestに移行した
+        //以下のバリデーション処理は\app\Http\Requests\TaskStoreAndUpdateRequestに移行した
         // $request->validate([
         //     'task_kind_id' => 'required|integer',
         //     'name' => 'required|string|max:255',
@@ -170,13 +170,13 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \app\Http\Requests\PostRequest  $request
+     * @param  \app\Http\Requests\TaskStoreAndUpdateRequest  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Project $project, Task $task)
+    public function update(TaskStoreAndUpdateRequest $request, Project $project, Task $task)
     {
-        //以下のバリデーション処理は\app\Http\Requests\PostRequestに移行した
+        //以下のバリデーション処理は\app\Http\Requests\TaskStoreAndUpdateRequestに移行した
         // $request->validate([
         //     'task_kind_id' => 'required|integer',
         //     'name' => 'required|string|max:255',
