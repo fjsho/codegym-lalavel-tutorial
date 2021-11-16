@@ -10,4 +10,13 @@ class TaskComment extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'comment',
+    ];
 }
