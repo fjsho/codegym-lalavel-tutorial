@@ -19,4 +19,12 @@ class TaskComment extends Model
     protected $fillable = [
         'comment',
     ];
+    /**
+     * ソート対象となる項目.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'created_at',
+    ];
 }
