@@ -172,5 +172,52 @@
                 </div>
             </div>
         </form>
+
+        {{-- 作業ここから --}}
+        <div>
+            {{-- ラベル --}}
+            <div class="mx-auto">
+                <div class="overflow-hidden sm:rounded-lg">
+                    <div class="px-6 py-3">
+                        <h4 class="font-semibold text-xl text-gray-800 leading-tight">
+                            {{ __('Comments') }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col px-8 pt-1.5 pb-1.5 mx-6 rounded-md bg-white">
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-1/2 px-3 mb-6">
+                        <i class="fas fa-user"></i>
+                        <p>ユーザー名</p>
+                        <p>yyyy/mm/dd G:I:S</p>
+                        <p>コメント本文</p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ route('tasks.store', ['project' => $project->id]) }}">
+            @csrf
+            <!-- Validation Errors -->
+            <x-validation-errors :errors="$errors" />
+
+            <div class="flex flex-col px-8 pt-6 mx-6 rounded-md bg-white">
+                <div class="-mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3 mb-6">
+                        <x-textarea id="comment" class="block mt-1 w-full " type="text" name="comment"  :value="old('comment')" placeholder="コメント" autofocus />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation -->
+        <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-end">
+            <x-button class="m-2 px-10">
+                {{ __('Update') }}
+            </x-button>
+        </div>
+    </form>
+        {{-- 作業ここまで --}}
+
     </div>
 </x-app-layout>
