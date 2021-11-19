@@ -202,9 +202,9 @@
                         <!-- Navigation -->
                         <div class="md:w-2/12 px-3 mb-3">
                             <div class="flex justify-end">
-                            <x-button class="modal-open px-8 bg-indigo-50 text-red-600 border-red-600 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300">
+                            <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300">
                                 {{ __('Delete') }}
-                            </x-button>
+                            </x-list-button>
                             </div>
                         </div>
                         <!--Modal-->
