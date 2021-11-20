@@ -147,8 +147,9 @@ class TaskController extends Controller
         $task_statuses = TaskStatus::all();
         $task_categories = TaskCategory::all();
         $assigners = User::all();
-        $task_comments = TaskComment::all()
-            ->where('task_id', '=', $task->id);
+        $task_comments = TaskComment::where('task_id', '=', $task->id)
+            ->oldest()
+            ->get();
 
         return view('tasks.edit', [
             'project' => $project,
