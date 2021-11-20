@@ -79,11 +79,11 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('task_comments');
         Schema::dropIfExists('tasks');
         Schema::dropIfExists('task_kinds');
         Schema::dropIfExists('task_statuses');
         Schema::dropIfExists('task_categories');
         Schema::dropIfExists('task_resolutions');
-        Schema::dropIfExists('task_comments');
     }
 }
