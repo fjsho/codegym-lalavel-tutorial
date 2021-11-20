@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
+use App\Models\TaskComment;
 use Illuminate\Http\Request;
 
 class TaskCommentController extends Controller
@@ -74,11 +76,19 @@ class TaskCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\TaskComment  $task_comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task, TaskComment $task_comment)
     {
-        //
+        if ($task_comment->delete()) {
+            $flash = ['success' => __('Comment deleted successfully.')];
+        } else {
+            $flash = ['error' => __('Failed to delete the comment.')];
+        }
+
+        return redirect()
+            ->route('task.edit', ['task' => $task->id])
+            ->with($flash);
     }
 }
