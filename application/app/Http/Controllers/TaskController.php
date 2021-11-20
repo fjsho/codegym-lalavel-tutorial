@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\TaskCategory;
 use App\Models\TaskKind;
 use App\Models\TaskStatus;
+use App\Models\TaskComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskStoreRequest;
@@ -146,6 +147,8 @@ class TaskController extends Controller
         $task_statuses = TaskStatus::all();
         $task_categories = TaskCategory::all();
         $assigners = User::all();
+        $task_comments = TaskComment::all()
+            ->where('task_id', '=', $task->id);
 
         return view('tasks.edit', [
             'project' => $project,
@@ -154,6 +157,7 @@ class TaskController extends Controller
             'task_categories' => $task_categories,
             'assigners' => $assigners,
             'task' => $task,
+            'task_comments' => $task_comments,
         ]);
     }
 
