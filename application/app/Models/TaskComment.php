@@ -19,7 +19,9 @@ class TaskComment extends Model
      * @var array
      */
     protected $fillable = [
+        'task_id',
         'comment',
+        'created_user_id',
     ];
     /**
      * ソート対象となる項目.
