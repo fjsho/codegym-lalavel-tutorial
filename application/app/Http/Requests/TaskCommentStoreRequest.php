@@ -7,13 +7,18 @@ use Illuminate\Foundation\Http\FormRequest;
 class TaskCommentStoreRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * @overRide
+     * Get data to be validated from the request.
      *
-     * @return bool
+     * @return array
      */
-    public function authorize()
+    public function validationData()
     {
-        return false;
+        $all =  $this->all();
+        if (isset($all['comment'])) {
+            $all['comment'] = preg_replace("/\r\n/", "\n", $all['comment']);
+        }
+        return $all;
     }
 
     /**
@@ -24,7 +29,7 @@ class TaskCommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'comment' => 'string|max:1000',
         ];
     }
 }
