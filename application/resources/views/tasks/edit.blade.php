@@ -255,26 +255,26 @@
                 </div>
                 @endforeach                
 
-            <form method="POST" action="{{ route('tasks.store', ['project' => $project->id]) }}">
+            <form method="POST" action="{{ route('comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
             @csrf
-            <!-- Validation Errors -->
-            <x-validation-errors :errors="$errors" />
+                <!-- Validation Errors -->
+                <x-validation-errors :errors="$errors" />
 
-            <div class="flex flex-col mx-6 mt-8 rounded-md bg-white">
-                <div class="-mx-3 md:flex">
-                    <div class="md:w-full px-3">
-                        <x-textarea id="comment" class="block w-full border-none" type="text" name="comment" rows="4"  :value="old('comment')" placeholder="コメント" autofocus />
+                <div class="flex flex-col mx-6 mt-8 rounded-md bg-white">
+                    <div class="-mx-3 md:flex">
+                        <div class="md:w-full px-3">
+                            <x-textarea id="comment" class="block w-full border-none" type="text" name="comment" rows="4"  :value="old('comment')" placeholder="コメント" autofocus />
+                        </div>
                     </div>
                 </div>
-            </div>
+                <!-- Navigation -->
+                <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-end">
+                    <x-button class="m-2 px-10">
+                        {{ __('Update') }}
+                    </x-button>
+                </div>
+            </form>
         </div>
-        <!-- Navigation -->
-        <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-end">
-            <x-button class="m-2 px-10">
-                {{ __('Update') }}
-            </x-button>
-        </div>
-    </form>
         {{-- 作業ここまで --}}
 
     </div>
