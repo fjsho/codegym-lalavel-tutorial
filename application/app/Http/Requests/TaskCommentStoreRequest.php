@@ -29,7 +29,7 @@ class TaskCommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment' => 'string|max:1000',
+            'comment' => 'required|string|max:1000',
         ];
     }
 }
