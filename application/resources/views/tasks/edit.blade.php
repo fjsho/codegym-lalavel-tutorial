@@ -3,27 +3,39 @@
     function toggleModal() {
         const body = document.querySelector('body');
         const modal = document.querySelector('.modal');
+        //modalウィンドウの表示・非表示を切り替える
         modal.classList.toggle('opacity-0');
+        //modalウィンドウのマウスイベントの有効・無効を切り替える
         modal.classList.toggle('pointer-events-none');
+        //modal-activeクラスのオンオフを切り替える
         body.classList.toggle('modal-active');
     };
 
+    //modalウィンドウ表示時の背景
     const overlay = document.querySelector('.modal-overlay');
+    //背景をクリックするとモーダルが見えなくなる
     overlay.addEventListener('click', toggleModal);
 
+    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
     var closeModal = document.querySelectorAll('.modal-close');
+    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
     for (var i = 0; i < closeModal.length; i++) {
         closeModal[i].addEventListener('click', toggleModal);
     }
 
+    //モーダルを表示するボタン。複数あるためAllで取得
     var openModal = document.querySelectorAll('.modal-open');
+    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
     for (var i = 0; i < openModal.length; i++) {
         openModal[i].addEventListener('click', function(event) {
+            //クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
+            //モーダルウィンドウを表示
             toggleModal();
         })
     }
 
+    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
     document.onkeydown = function(evt) {
         evt = evt || window.event;
         var isEscape = false;
