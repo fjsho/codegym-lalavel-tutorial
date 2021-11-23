@@ -94,7 +94,7 @@ class TaskCommentController extends Controller
      * @param  \App\Models\TaskComment  $task_comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task, TaskComment $task_comment)
+    public function destroy(Project $project, Task $task, TaskComment $task_comment)
     {
         if ($task_comment->delete()) {
             $flash = ['success' => __('Comment deleted successfully.')];
@@ -103,7 +103,7 @@ class TaskCommentController extends Controller
         }
 
         return redirect()
-            ->route('tasks.edit', ['task' => $task->id])
+            ->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
             ->with($flash);
     }
 }
