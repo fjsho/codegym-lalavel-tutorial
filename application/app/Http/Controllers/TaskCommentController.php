@@ -47,7 +47,7 @@ class TaskCommentController extends Controller
         ])) {
             $flash = ['success' => __('Comment created successfully.')];
         } else {
-            $flash = ['error' => __('Failed to create the Comment.')];
+            $flash = ['error' => __('Failed to create the comment.')];
         }
 
         return redirect()->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
