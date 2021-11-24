@@ -27,9 +27,11 @@
     };
 
     //modalウィンドウ表示時の背景
-    const overlay = document.querySelector('.modal-overlay');
+    const overlay = document.querySelectorAll('.modal-overlay');
     //背景をクリックするとモーダルが見えなくなる
-    overlay.addEventListener('click', toggleModal);
+    for (var i = 0; i < overlay.length; i++) {
+        overlay[i].addEventListener('click', toggleModal);
+    }
 
     //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
     var closeModal = document.querySelectorAll('.modal-close');
@@ -164,7 +166,7 @@
 
             <!--Modal-->
             <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
-                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-open="modal-1"></div>
 
                 <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
 
@@ -237,7 +239,7 @@
                         </div>
                         <!--Modal-->
                         <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
-                            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+                            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-open="modal-2"></div>
             
                             <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
             
