@@ -3,17 +3,15 @@
     function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
-
-        //クリックされた削除ボタンのdata-modal-open属性の値を取得
+        console.log('Start!!');
+        console.log(event.currentTarget);
+        //クリックされたボタンのdata-modal-open属性の値を取得
         const dataModalOpen = event.currentTarget.getAttribute('data-modal-open');
         for(let i = 0; i < modal.length; i++){
-            // console.log(i);
-            // console.log(dataModalOpen);
-            // console.log(modal[i].getAttribute('data-modal'));
-            // console.log(modal[i]);
-            // 削除ボタンからの呼び出し かつ カスタムデータ属性不一致なら次のループへ移行する
+            console.log(dataModalOpen);
+            console.log(modal[i].getAttribute('data-modal'));
             if(dataModalOpen && (modal[i].getAttribute('data-modal') !== dataModalOpen)){
-                // console.log('continue');
+                console.log('continue');
                 continue;
             }
             //メイン処理
@@ -23,8 +21,9 @@
             modal[i].classList.toggle('pointer-events-none');
             //modal-activeクラスのオンオフを切り替える
             body.classList.toggle('modal-active');
-            // console.log('main');
+            console.log('main');
         }
+        console.log('Finish.');
     };
 
     //modalウィンドウ表示時の背景
@@ -169,7 +168,7 @@
 
                 <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
 
-                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-open="modal-1">
                         <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                             <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                         </svg>
@@ -179,7 +178,7 @@
                     <div class="modal-content py-4 text-left px-6">
                         <div class="flex justify-between items-center pb-3">
                             <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this task?') }}</p>
-                            <div class="modal-close cursor-pointer z-50">
+                            <div class="modal-close cursor-pointer z-50" data-modal-open="modal-1">
                                 <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                     <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                 </svg>
@@ -189,7 +188,7 @@
                         <p>{{ __('Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.') }}</p>
 
                         <div class="flex justify-end pt-2">
-                            <x-link-button class="modal-close m-2" href="#">
+                            <x-link-button class="modal-close m-2" href="#" data-modal-open="modal-1">
                                 {{ __('Cancel') }}
                             </x-link-button>
                             <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
@@ -242,7 +241,7 @@
             
                             <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
             
-                                <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+                                <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-open="modal-2">
                                     <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                         <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                     </svg>
@@ -252,7 +251,7 @@
                                 <div class="modal-content py-4 text-left px-6">
                                     <div class="flex justify-between items-center pb-3">
                                         <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
-                                        <div class="modal-close cursor-pointer z-50">
+                                        <div class="modal-close cursor-pointer z-50" data-modal-open="modal-2">
                                             <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                 <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                             </svg>
@@ -262,7 +261,7 @@
                                     <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
             
                                     <div class="flex justify-end pt-2">
-                                        <x-link-button class="modal-close m-2" href="#">
+                                        <x-link-button class="modal-close m-2" href="#" data-modal-open="modal-2">
                                             {{ __('Cancel') }}
                                         </x-link-button>
                                         <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
