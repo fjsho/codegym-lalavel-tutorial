@@ -1,14 +1,30 @@
 @section('script')
 <script>
-    function toggleModal() {
+    function toggleModal(event) {
         const body = document.querySelector('body');
-        const modal = document.querySelector('.modal');
-        //modalウィンドウの表示・非表示を切り替える
-        modal.classList.toggle('opacity-0');
-        //modalウィンドウのマウスイベントの有効・無効を切り替える
-        modal.classList.toggle('pointer-events-none');
-        //modal-activeクラスのオンオフを切り替える
-        body.classList.toggle('modal-active');
+        const modal = document.querySelectorAll('.modal');
+
+        //クリックされた削除ボタンのdata-modal-open属性の値を取得
+        const dataModalOpen = event.currentTarget.getAttribute('data-modal-open');
+        for(let i = 0; i < modal.length; i++){
+            // console.log(i);
+            // console.log(dataModalOpen);
+            // console.log(modal[i].getAttribute('data-modal'));
+            // console.log(modal[i]);
+            // 削除ボタンからの呼び出し かつ カスタムデータ属性不一致なら次のループへ移行する
+            if(dataModalOpen && (modal[i].getAttribute('data-modal') !== dataModalOpen)){
+                // console.log('continue');
+                continue;
+            }
+            //メイン処理
+            //modalウィンドウの表示・非表示を切り替える
+            modal[i].classList.toggle('opacity-0');
+            //modalウィンドウのマウスイベントの有効・無効を切り替える
+            modal[i].classList.toggle('pointer-events-none');
+            //modal-activeクラスのオンオフを切り替える
+            body.classList.toggle('modal-active');
+            // console.log('main');
+        }
     };
 
     //modalウィンドウ表示時の背景
@@ -31,7 +47,7 @@
             //クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
             //モーダルウィンドウを表示
-            toggleModal();
+            toggleModal(event);
         })
     }
 
@@ -45,7 +61,7 @@
             isEscape = (evt.keyCode === 27);
         }
         if (isEscape && document.body.classList.contains('modal-active')) {
-            toggleModal();
+            toggleModal(evt);
         }
     };
 
@@ -142,13 +158,13 @@
             @method('DELETE')
             <!-- Navigation -->
             <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-start">
-                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-open="modal-1">
                     {{ __('Delete') }}
                 </x-button>
             </div>
 
             <!--Modal-->
-            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
                 <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
 
                 <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
@@ -214,14 +230,14 @@
                                 <form name="deleteform" method="POST" action="{{ route('comments.destroy', ['project' => $project->id, 'task' => $task->id, 'comment' => $task_comment]) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300">
+                                    <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-open="modal-2">
                                         {{ __('Delete') }}
                                     </x-list-button>
                                 </form>
                             </div>
                         </div>
                         <!--Modal-->
-                        <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+                        <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
                             <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
             
                             <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
