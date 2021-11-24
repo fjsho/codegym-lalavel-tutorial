@@ -10,18 +10,17 @@
         for(let i = 0; i < modal.length; i++){
             console.log(dataModalOpen);
             console.log(modal[i].getAttribute('data-modal'));
-            if(dataModalOpen && (modal[i].getAttribute('data-modal') !== dataModalOpen)){
-                console.log('continue');
-                continue;
+            if((modal[i].getAttribute('data-modal') === dataModalOpen)){
+                //メイン処理
+                //modalウィンドウの表示・非表示を切り替える
+                modal[i].classList.toggle('opacity-0');
+                //modalウィンドウのマウスイベントの有効・無効を切り替える
+                modal[i].classList.toggle('pointer-events-none');
+                //modal-activeクラスのオンオフを切り替える
+                body.classList.toggle('modal-active');
+                console.log('main');
             }
-            //メイン処理
-            //modalウィンドウの表示・非表示を切り替える
-            modal[i].classList.toggle('opacity-0');
-            //modalウィンドウのマウスイベントの有効・無効を切り替える
-            modal[i].classList.toggle('pointer-events-none');
-            //modal-activeクラスのオンオフを切り替える
-            body.classList.toggle('modal-active');
-            console.log('main');
+            console.log('loop');
         }
         console.log('Finish.');
     };
