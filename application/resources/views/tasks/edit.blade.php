@@ -5,12 +5,12 @@
         const modal = document.querySelectorAll('.modal');
         console.log('Start!!');
         console.log(event.currentTarget);
-        //クリックされたボタンのdata-modal-open属性の値を取得
-        const dataModalOpen = event.currentTarget.getAttribute('data-modal-open');
+        //クリックされたボタンのdata-modal-select属性の値を取得
+        const dataModalSelect = event.currentTarget.getAttribute('data-modal-select');
         for(let i = 0; i < modal.length; i++){
-            console.log(dataModalOpen);
+            console.log(dataModalSelect);
             console.log(modal[i].getAttribute('data-modal'));
-            if((modal[i].getAttribute('data-modal') === dataModalOpen)){
+            if((modal[i].getAttribute('data-modal') === dataModalSelect)){
                 //メイン処理
                 //modalウィンドウの表示・非表示を切り替える
                 modal[i].classList.toggle('opacity-0');
@@ -158,18 +158,18 @@
             @method('DELETE')
             <!-- Navigation -->
             <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-start">
-                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-open="modal-1">
+                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-select="modal-1">
                     {{ __('Delete') }}
                 </x-button>
             </div>
 
             <!--Modal-->
             <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
-                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-open="modal-1"></div>
+                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-1"></div>
 
                 <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
 
-                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-open="modal-1">
+                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-1">
                         <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                             <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                         </svg>
@@ -179,7 +179,7 @@
                     <div class="modal-content py-4 text-left px-6">
                         <div class="flex justify-between items-center pb-3">
                             <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this task?') }}</p>
-                            <div class="modal-close cursor-pointer z-50" data-modal-open="modal-1">
+                            <div class="modal-close cursor-pointer z-50" data-modal-select="modal-1">
                                 <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                     <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                 </svg>
@@ -189,7 +189,7 @@
                         <p>{{ __('Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.') }}</p>
 
                         <div class="flex justify-end pt-2">
-                            <x-link-button class="modal-close m-2" href="#" data-modal-open="modal-1">
+                            <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-1">
                                 {{ __('Cancel') }}
                             </x-link-button>
                             <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
@@ -230,7 +230,7 @@
                                 <form name="deleteform" method="POST" action="{{ route('comments.destroy', ['project' => $project->id, 'task' => $task->id, 'comment' => $task_comment]) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-open="modal-2">
+                                    <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2">
                                         {{ __('Delete') }}
                                     </x-list-button>
                                 </form>
@@ -238,11 +238,11 @@
                         </div>
                         <!--Modal-->
                         <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
-                            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-open="modal-2"></div>
+                            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2"></div>
             
                             <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
             
-                                <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-open="modal-2">
+                                <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2">
                                     <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                         <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                     </svg>
@@ -252,7 +252,7 @@
                                 <div class="modal-content py-4 text-left px-6">
                                     <div class="flex justify-between items-center pb-3">
                                         <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
-                                        <div class="modal-close cursor-pointer z-50" data-modal-open="modal-2">
+                                        <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2">
                                             <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                 <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                             </svg>
@@ -262,7 +262,7 @@
                                     <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
             
                                     <div class="flex justify-end pt-2">
-                                        <x-link-button class="modal-close m-2" href="#" data-modal-open="modal-2">
+                                        <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2">
                                             {{ __('Cancel') }}
                                         </x-link-button>
                                         <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
