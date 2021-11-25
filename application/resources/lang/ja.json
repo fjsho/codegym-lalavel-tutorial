@@ -202,5 +202,6 @@
     "Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.":"本当にコメントを削除してよろしいでしょうか？一度コメントを削除すると、すべてのリソースとデータは永久に削除されます。",
     "Comment created successfully.": "コメントを投稿しました。",
     "Failed to create the comment.": "コメントの投稿に失敗しました。",
+    "Comment deleted successfully.": "コメントを削除しました。",
     "Failed to delete the comment.": "コメントの削除に失敗しました。"
 }
