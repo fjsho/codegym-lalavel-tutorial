@@ -230,9 +230,11 @@
                             <!-- Navigation -->
                             <div class="md:w-2/12 px-3 mb-3">
                                 <div class="flex justify-end">
+                                        @can('delete', $task_comment)
                                         <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2">
                                             {{ __('Delete') }}
                                         </x-list-button>
+                                        @endcan
                                 </div>
                             </div>
                             <!--Modal-->
