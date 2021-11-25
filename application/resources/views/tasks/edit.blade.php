@@ -215,7 +215,7 @@
             </div>
             {{--１行目 アイコンのカラム、ユーザー名・年月日のカラム、削除ボタンのカラム　２行目：コメント本文 --}}
                 @foreach ($task_comments as $task_comment)
-                <form name="deleteform" method="POST" action="{{ route('comments.destroy', ['project' => $project->id, 'task' => $task->id, 'comment' => $task_comment]) }}">
+                <form name="deleteform" method="POST" action="{{ route('task_comments.destroy', ['project' => $project->id, 'task' => $task->id, 'task_comment' => $task_comment]) }}">
                     @csrf
                     @method('DELETE')
                     <div class="flex flex-col px-3 pt-3 mx-6 mb-3 rounded-md bg-white">
@@ -285,7 +285,7 @@
                 </form>
                 @endforeach                
 
-            <form method="POST" action="{{ route('comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
+            <form method="POST" action="{{ route('task_comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
             @csrf
                 <!-- Validation Errors -->
                 <x-validation-errors :errors="$errors" />

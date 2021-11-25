@@ -32,5 +32,5 @@ Route::resource('projects', ProjectController::class)
 Route::resource('projects/{project}/tasks', TaskController::class)
     ->middleware(['auth']);
 
-Route::resource('projects/{project}/tasks/{task}/comments', TaskCommentController::class)
+Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentController::class)
     ->middleware(['auth']);
