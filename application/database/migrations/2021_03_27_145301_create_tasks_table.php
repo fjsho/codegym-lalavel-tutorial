@@ -61,15 +61,6 @@ class CreateTasksTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        
-        Schema::create('task_comments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('task_id')->constrained('tasks');
-            $table->string('comment',1000);
-            $table->foreignId('created_user_id')->constrained('users');
-            $table->timestamps();
-            $table->softDeletes();
-        });
     }
 
     /**
@@ -79,7 +70,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_comments');
         Schema::dropIfExists('tasks');
         Schema::dropIfExists('task_kinds');
         Schema::dropIfExists('task_statuses');
