@@ -3,14 +3,19 @@
     function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
-        console.log('Start!!');
-        console.log(event.currentTarget);
-        //クリックされたボタンのdata-modal-select属性の値を取得
-        const dataModalSelect = event.currentTarget.getAttribute('data-modal-select');
+
+        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        console.log(event.type);
+        const dataModalSelect = event.type === 'click' ?
+            //クリック：ボタンのdata-modal-select属性の値を取得
+            event.currentTarget.getAttribute('data-modal-select') :
+            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
+            document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
+
+        //各モーダルに対して判定を行う
         for(let i = 0; i < modal.length; i++){
-            console.log(dataModalSelect);
-            console.log(modal[i].getAttribute('data-modal'));
-            if((modal[i].getAttribute('data-modal') === dataModalSelect)){
+            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
+            if(modal[i].getAttribute('data-modal') === dataModalSelect){
                 //メイン処理
                 //modalウィンドウの表示・非表示を切り替える
                 modal[i].classList.toggle('opacity-0');
@@ -18,11 +23,8 @@
                 modal[i].classList.toggle('pointer-events-none');
                 //modal-activeクラスのオンオフを切り替える
                 body.classList.toggle('modal-active');
-                console.log('main');
             }
-            console.log('loop');
         }
-        console.log('Finish.');
     };
 
     //modalウィンドウ表示時の背景
@@ -52,14 +54,22 @@
     }
 
     //Escボタンを押した時の処理（モーダルウィンドウを非表示）
+    //何かしらキーを押したら発火
     document.onkeydown = function(evt) {
+        //もしイベントが空だったらwindow.eventを入れる
         evt = evt || window.event;
         var isEscape = false;
+        //Escキーが押された場合にisEscape変数をtrueにする処理
         if ('key' in evt) {
+            //もしevt配列の"key"キーがtrueなら
+            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
             isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
         } else {
+            //"key"キーがfalseだったら
+            //"keyCode"キーに27を代入
             isEscape = (evt.keyCode === 27);
         }
+        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
             toggleModal(evt);
         }
@@ -213,7 +223,7 @@
                     </div>
                 </div>
             </div>
-            {{--１行目 アイコンのカラム、ユーザー名・年月日のカラム、削除ボタンのカラム　２行目：コメント本文 --}}
+            {{--投稿済みコメント表示枠 --}}
                 @foreach ($task_comments as $task_comment)
                 <form name="deleteform" method="POST" action="{{ route('task_comments.destroy', ['project' => $project->id, 'task' => $task->id, 'task_comment' => $task_comment]) }}">
                     @csrf
@@ -237,42 +247,6 @@
                                         @endcan
                                 </div>
                             </div>
-                            <!--Modal-->
-                            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
-                                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2"></div>
-                
-                                <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-                
-                                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2">
-                                        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                                        </svg>
-                                        <span class="text-sm">(Esc)</span>
-                                    </div>
-                
-                                    <div class="modal-content py-4 text-left px-6">
-                                        <div class="flex justify-between items-center pb-3">
-                                            <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
-                                            <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2">
-                                                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                                                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                
-                                        <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
-                
-                                        <div class="flex justify-end pt-2">
-                                            <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2">
-                                                {{ __('Cancel') }}
-                                            </x-link-button>
-                                            <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
-                                                {{ __('Delete') }}
-                                            </x-button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="-mx-3 md:flex mb-6">
                             <div class="md:w-1/12 px-3 mb-6">
@@ -282,9 +256,46 @@
                             </div>
                         </div>
                     </div>
+                    @endforeach                
+                    <!--Modal-->
+                    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
+                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2"></div>
+        
+                        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        
+                            <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2">
+                                <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                </svg>
+                                <span class="text-sm">(Esc)</span>
+                            </div>
+        
+                            <div class="modal-content py-4 text-left px-6">
+                                <div class="flex justify-between items-center pb-3">
+                                    <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
+                                    <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2">
+                                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+        
+                                <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
+        
+                                <div class="flex justify-end pt-2">
+                                    <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2">
+                                        {{ __('Cancel') }}
+                                    </x-link-button>
+                                    <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                                        {{ __('Delete') }}
+                                    </x-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
-                @endforeach                
 
+            {{--新規コメント投稿枠--}}
             <form method="POST" action="{{ route('task_comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
             @csrf
                 <!-- Validation Errors -->
