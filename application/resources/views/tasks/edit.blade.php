@@ -5,7 +5,6 @@
         const modal = document.querySelectorAll('.modal');
 
         //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
-        console.log(event.type);
         const dataModalSelect = event.type === 'click' ?
             //クリック：ボタンのdata-modal-select属性の値を取得
             event.currentTarget.getAttribute('data-modal-select') :
@@ -241,7 +240,7 @@
                             <div class="md:w-2/12 px-3 mb-3">
                                 <div class="flex justify-end">
                                         @can('delete', $task_comment)
-                                        <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2">
+                                        <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2-{{$loop->iteration}}">
                                             {{ __('Delete') }}
                                         </x-list-button>
                                         @endcan
@@ -256,14 +255,13 @@
                             </div>
                         </div>
                     </div>
-                    @endforeach                
                     <!--Modal-->
-                    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2">
-                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2"></div>
+                    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2-{{$loop->iteration}}">
+                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2-{{$loop->iteration}}"></div>
         
                         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         
-                            <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2">
+                            <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2-{{$loop->iteration}}">
                                 <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                     <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                 </svg>
@@ -273,7 +271,7 @@
                             <div class="modal-content py-4 text-left px-6">
                                 <div class="flex justify-between items-center pb-3">
                                     <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
-                                    <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2">
+                                    <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2-{{$loop->iteration}}">
                                         <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                             <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                         </svg>
@@ -283,7 +281,7 @@
                                 <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
         
                                 <div class="flex justify-end pt-2">
-                                    <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2">
+                                    <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2-{{$loop->iteration}}">
                                         {{ __('Cancel') }}
                                     </x-link-button>
                                     <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
@@ -294,6 +292,7 @@
                         </div>
                     </div>
                 </form>
+                @endforeach
 
             {{--新規コメント投稿枠--}}
             <form method="POST" action="{{ route('task_comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
