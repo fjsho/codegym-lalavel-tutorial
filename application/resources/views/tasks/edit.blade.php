@@ -251,7 +251,7 @@
                         <div class="-mx-3 md:flex mb-6">
                             <div class="md:w-1/12 px-3 mb-6">
                             </div>
-                            <div class="md:w-full px-3 mb-6">
+                            <div class="md:w-11/12 px-3 mb-6 break-all">
                                 <p>{!!nl2br(e($task_comment->comment))!!}</p>
                             </div>
                         </div>
