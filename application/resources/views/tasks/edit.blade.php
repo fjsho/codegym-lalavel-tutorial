@@ -297,8 +297,6 @@
             {{--新規コメント投稿枠--}}
             <form method="POST" action="{{ route('task_comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
             @csrf
-                <!-- Validation Errors -->
-                <x-validation-errors :errors="$errors" />
 
                 <div class="flex flex-col mx-6 mt-8 rounded-md bg-white">
                     <div class="-mx-3 md:flex">
