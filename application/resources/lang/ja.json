@@ -166,7 +166,7 @@
     "to": "件 〜",
     "of": "件を表示（全",
     "results": "件）&nbsp;",
-    "Update": "保存する",
+    "Update": "更新する",
     "Update Cancel": "一覧へ戻る",
     "Projects Edit": "プロジェクトの編集",
     "Project created successfully.": "プロジェクトを作成しました。",
@@ -196,5 +196,13 @@
     "Task deleted successfully.": "課題を削除しました。",
     "Failed to delete the task.": "課題情報の削除に失敗しました。",
     "Are you sure you want to delete this task?": "課題を削除しますか？",
-    "Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.": "本当に課題を削除してよろしいでしょうか？一度課題を削除すると、すべてのリソースとデータは永久に削除されます。"
+    "Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.": "本当に課題を削除してよろしいでしょうか？一度課題を削除すると、すべてのリソースとデータは永久に削除されます。",
+    "Comments": "コメント",
+    "Create Comment": "コメントを投稿する",
+    "Are you sure you want to delete this comment?": "コメントを削除しますか？",
+    "Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.":"本当にコメントを削除してよろしいでしょうか？一度コメントを削除すると、すべてのリソースとデータは永久に削除されます。",
+    "Comment created successfully.": "コメントを投稿しました。",
+    "Failed to create the comment.": "コメントの投稿に失敗しました。",
+    "Comment deleted successfully.": "コメントを削除しました。",
+    "Failed to delete the comment.": "コメントの削除に失敗しました。"
 }

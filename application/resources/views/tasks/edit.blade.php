@@ -1,39 +1,76 @@
 @section('script')
 <script>
-    function toggleModal() {
+    function toggleModal(event) {
         const body = document.querySelector('body');
-        const modal = document.querySelector('.modal');
-        modal.classList.toggle('opacity-0');
-        modal.classList.toggle('pointer-events-none');
-        body.classList.toggle('modal-active');
+        const modal = document.querySelectorAll('.modal');
+
+        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        const dataModalSelect = event.type === 'click' ?
+            //クリック：ボタンのdata-modal-select属性の値を取得
+            event.currentTarget.getAttribute('data-modal-select') :
+            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
+            document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
+
+        //各モーダルに対して判定を行う
+        for(let i = 0; i < modal.length; i++){
+            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
+            if(modal[i].getAttribute('data-modal') === dataModalSelect){
+                //メイン処理
+                //modalウィンドウの表示・非表示を切り替える
+                modal[i].classList.toggle('opacity-0');
+                //modalウィンドウのマウスイベントの有効・無効を切り替える
+                modal[i].classList.toggle('pointer-events-none');
+                //modal-activeクラスのオンオフを切り替える
+                body.classList.toggle('modal-active');
+            }
+        }
     };
 
-    const overlay = document.querySelector('.modal-overlay');
-    overlay.addEventListener('click', toggleModal);
+    //modalウィンドウ表示時の背景
+    const overlay = document.querySelectorAll('.modal-overlay');
+    //背景をクリックするとモーダルが見えなくなる
+    for (var i = 0; i < overlay.length; i++) {
+        overlay[i].addEventListener('click', toggleModal);
+    }
 
+    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
     var closeModal = document.querySelectorAll('.modal-close');
+    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
     for (var i = 0; i < closeModal.length; i++) {
         closeModal[i].addEventListener('click', toggleModal);
     }
 
+    //モーダルを表示するボタン。複数あるためAllで取得
     var openModal = document.querySelectorAll('.modal-open');
+    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
     for (var i = 0; i < openModal.length; i++) {
         openModal[i].addEventListener('click', function(event) {
+            //クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
-            toggleModal();
+            //モーダルウィンドウを表示
+            toggleModal(event);
         })
     }
 
+    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
+    //何かしらキーを押したら発火
     document.onkeydown = function(evt) {
+        //もしイベントが空だったらwindow.eventを入れる
         evt = evt || window.event;
         var isEscape = false;
+        //Escキーが押された場合にisEscape変数をtrueにする処理
         if ('key' in evt) {
+            //もしevt配列の"key"キーがtrueなら
+            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
             isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
         } else {
+            //"key"キーがfalseだったら
+            //"keyCode"キーに27を代入
             isEscape = (evt.keyCode === 27);
         }
+        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
-            toggleModal();
+            toggleModal(evt);
         }
     };
 
@@ -130,18 +167,18 @@
             @method('DELETE')
             <!-- Navigation -->
             <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-start">
-                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-select="modal-1">
                     {{ __('Delete') }}
                 </x-button>
             </div>
 
             <!--Modal-->
-            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
+                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-1"></div>
 
                 <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
 
-                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-1">
                         <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                             <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                         </svg>
@@ -151,7 +188,7 @@
                     <div class="modal-content py-4 text-left px-6">
                         <div class="flex justify-between items-center pb-3">
                             <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this task?') }}</p>
-                            <div class="modal-close cursor-pointer z-50">
+                            <div class="modal-close cursor-pointer z-50" data-modal-select="modal-1">
                                 <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                     <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                 </svg>
@@ -161,7 +198,7 @@
                         <p>{{ __('Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.') }}</p>
 
                         <div class="flex justify-end pt-2">
-                            <x-link-button class="modal-close m-2" href="#">
+                            <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-1">
                                 {{ __('Cancel') }}
                             </x-link-button>
                             <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
@@ -172,5 +209,111 @@
                 </div>
             </div>
         </form>
+
+        {{-- 作業ここから --}}
+        <div>
+            {{-- ラベル --}}
+            <div class="mx-auto">
+                <div class="overflow-hidden sm:rounded-lg">
+                    <div class="px-6 py-3">
+                        <h4 class="font-semibold text-xl text-gray-800 leading-tight">
+                            {{ __('Comments') }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            {{--投稿済みコメント表示枠 --}}
+                @foreach ($task_comments as $task_comment)
+                <form name="deleteform" method="POST" action="{{ route('task_comments.destroy', ['project' => $project->id, 'task' => $task->id, 'task_comment' => $task_comment]) }}">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex flex-col px-3 pt-3 mx-6 mb-3 rounded-md bg-white">
+                        <div class="-mx-3 md:flex">
+                            <div class="md:w-1/12 px-3 mb-3">
+                                <i class="fas fa-user fa-3x"></i>
+                            </div>
+                            <div class="md:w-9/12 px-3 mb-3">
+                                <p><b>{{$task_comment->user->name}}</b></p>
+                                <p>{{$task_comment->created_at}}</p>
+                            </div>
+                            <!-- Navigation -->
+                            <div class="md:w-2/12 px-3 mb-3">
+                                <div class="flex justify-end">
+                                        @can('delete', $task_comment)
+                                        <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2-{{$loop->iteration}}">
+                                            {{ __('Delete') }}
+                                        </x-list-button>
+                                        @endcan
+                                </div>
+                            </div>
+                        </div>
+                        <div class="-mx-3 md:flex mb-6">
+                            <div class="md:w-1/12 px-3 mb-6">
+                            </div>
+                            <div class="md:w-11/12 px-3 mb-6 break-all">
+                                <p>{!!nl2br(e($task_comment->comment))!!}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal-->
+                    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-2-{{$loop->iteration}}">
+                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-2-{{$loop->iteration}}"></div>
+        
+                        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        
+                            <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-2-{{$loop->iteration}}">
+                                <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                </svg>
+                                <span class="text-sm">(Esc)</span>
+                            </div>
+        
+                            <div class="modal-content py-4 text-left px-6">
+                                <div class="flex justify-between items-center pb-3">
+                                    <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this comment?') }}</p>
+                                    <div class="modal-close cursor-pointer z-50" data-modal-select="modal-2-{{$loop->iteration}}">
+                                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+        
+                                <p>{{ __('Are you sure you want to delete this comment? Once a comment is deleted, all of its resources and data will be permanently deleted.') }}</p>
+        
+                                <div class="flex justify-end pt-2">
+                                    <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-2-{{$loop->iteration}}">
+                                        {{ __('Cancel') }}
+                                    </x-link-button>
+                                    <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                                        {{ __('Delete') }}
+                                    </x-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                @endforeach
+
+            {{--新規コメント投稿枠--}}
+            <form method="POST" action="{{ route('task_comments.store', ['project' => $project->id, 'task' => $task->id]) }}">
+            @csrf
+
+                <div class="flex flex-col mx-6 mt-8 rounded-md bg-white">
+                    <div class="-mx-3 md:flex">
+                        <div class="md:w-full px-3">
+                            <x-textarea id="comment" class="block w-full border-none" type="text" name="comment" rows="4"  :value="old('comment')" placeholder="コメント" autofocus />
+                        </div>
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-end">
+                    <x-button class="m-2 px-10">
+                        {{ __('Create Comment') }}
+                    </x-button>
+                </div>
+            </form>
+        </div>
+        {{-- 作業ここまで --}}
+
     </div>
 </x-app-layout>
