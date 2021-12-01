@@ -15,7 +15,11 @@ class CreateTaskPicturesTable extends Migration
     {
         Schema::create('task_pictures', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('task_id')->constrained('tasks');
+            $table->string('file_path');
+            $table->foreignId('created_user_id')->constrained('tasks');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
