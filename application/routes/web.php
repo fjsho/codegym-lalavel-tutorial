@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\TaskPictureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +34,7 @@ Route::resource('projects/{project}/tasks', TaskController::class)
     ->middleware(['auth']);
 
 Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentController::class)
+    ->middleware(['auth']);
+
+Route::resource('projects/{project}/tasks/{task}/task_pictures', TaskPictureController::class)
     ->middleware(['auth']);
