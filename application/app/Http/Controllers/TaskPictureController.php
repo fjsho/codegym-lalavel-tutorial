@@ -94,8 +94,16 @@ class TaskPictureController extends Controller
      * @param  \App\Models\TaskPicture  $taskPicture
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskPicture $taskPicture)
+    public function destroy(Project $project, Task $task, TaskPicture $task_picture)
     {
-        //
+        if ($task_picture->delete()) {
+            $flash = ['success' => __('Picture deleted successfully.')];
+        } else {
+            $flash = ['error' => __('Failed to delete the picture.')];
+        }
+
+        return redirect()
+            ->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
+            ->with($flash);
     }
 }
