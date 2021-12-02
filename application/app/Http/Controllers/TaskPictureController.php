@@ -38,11 +38,14 @@ class TaskPictureController extends Controller
      */
     public function store(TaskPictureStoreRequest $request, Project $project, Task $task)
     {
+        // ddd($request->file('file'));
         $validated = $request->validated();
+        $file_name = $request->file('file')->getClientOriginalName();
+        $request->file('file')->storeAs('public',$file_name);
 
         if (TaskPicture::create([
             'task_id' => $task->id,
-            'file_path' => $validated['file_path'],
+            'file_path' => $file_name,
             'created_user_id' => $request->user()->id,
         ])) {
             $flash = ['success' => __('Picture uploaded successfully.')];

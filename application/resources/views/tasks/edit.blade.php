@@ -161,7 +161,14 @@
                 </div>
             </div>
         </form>
+        {{-- 画像投稿機能ここから --}}
+        <form name="uploadform" method="POST" action="{{ route('task_pictures.store', ['project' => $project->id, 'task' => $task]) }}" enctype="multipart/form-data">
+            @csrf
+            <input type="file" id="file" name="file" class="form-control">
+            <button type="submit">アップロード</button>
+        </form>
 
+        {{-- 画像投稿機能ここまで --}}
         <form name="deleteform" method="POST" action="{{ route('tasks.destroy', ['project' => $project->id, 'task' => $task]) }}">
             @csrf
             @method('DELETE')

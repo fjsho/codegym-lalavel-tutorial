@@ -7,13 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 class TaskPictureStoreRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * @overRide
+     * Get data to be validated from the request.
      *
-     * @return bool
+     * @return array
      */
-    public function authorize()
+    public function validationData()
     {
-        return false;
+        return $this->all();
     }
 
     /**
