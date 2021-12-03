@@ -14,7 +14,9 @@ class TaskPictureStoreRequest extends FormRequest
      */
     public function validationData()
     {
-        return $this->all();
+        $all = $this->all();
+
+        return $all;
     }
 
     /**
@@ -25,7 +27,7 @@ class TaskPictureStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'file' => 'required|file|max:10240|mimes:jpg,png,gif',
         ];
     }
 }

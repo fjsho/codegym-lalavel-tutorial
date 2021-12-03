@@ -161,6 +161,7 @@
                 </div>
             </div>
         </form>
+        
         {{-- 画像投稿機能ここから --}}
         <form name="uploadform" method="POST" action="{{ route('task_pictures.store', ['project' => $project->id, 'task' => $task]) }}" enctype="multipart/form-data">
             @csrf

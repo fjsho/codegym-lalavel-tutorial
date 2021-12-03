@@ -38,8 +38,6 @@ class TaskPictureController extends Controller
      */
     public function store(TaskPictureStoreRequest $request, Project $project, Task $task)
     {
-        // ddd($request->file('file'));
-        $validated = $request->validated();
         $file_name = $request->file('file')->getClientOriginalName();
         $request->file('file')->storeAs('public',$file_name);
 
