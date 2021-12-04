@@ -216,17 +216,51 @@
             </div>
         </form>
 
+        {{-- 投稿画像表示欄ここから --}}
+        <div class="mx-auto">
+            <div class="overflow-hidden sm:rounded-lg">
+                <div class="px-6 py-3">
+                    <h4 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ __('Pictures') }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="px-3 pt-3 mx-6 mb-3 rounded-md">
+            <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
+                @foreach ($task_pictures as $task_picture)
+                    @break($loop->index > 4)
+                    <form name="deleteform" method="POST" action="{{ route('task_pictures.destroy', ['project' => $project->id, 'task' => $task->id, 'task_picture' => $task_picture]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <div class="h-60">
+                            <img src="/storage/{{$task_picture->file_path}}" alt="task_picture" class="w-full h-full object-contain">
+                        </div>
+                        <div class="w-full h-full px-3 py-3">
+                            <div class="flex justify-end">
+                                <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-2-{{$loop->iteration}}">
+                                    {{ __('Delete') }}
+                                </x-list-button>
+                            </div>
+                        </div>
+                    </form>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- 投稿画像表示欄ここまで --}}
+
         {{-- 画像投稿機能ここから --}}
         <form name="uploadform" method="POST" action="{{ route('task_pictures.store', ['project' => $project->id, 'task' => $task]) }}" enctype="multipart/form-data">
             @csrf
+            <!-- ドラッグ&ドロップエリア -->
             <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
-                <!-- ドラッグ&ドロップエリア -->
+                {{-- ここ要英語化 --}}
                 <p>ファイルをドラッグ＆ドロップするかクリップボードから画像を貼り付けてください　または　
                     <label for="file" class="inline-block p-3 border rounded bg-gray-300">ファイルを選択する</label>
                     <input type="file" name="file" id="file" class="hidden">
                 </p>        
             </div>
-            {{-- <button type="submit">アップロード</button> --}}
         </form>
         
         {{-- 画像投稿機能ここまで --}}
