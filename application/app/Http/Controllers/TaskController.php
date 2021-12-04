@@ -8,6 +8,7 @@ use App\Models\TaskCategory;
 use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\TaskComment;
+use App\Models\TaskPicture;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskStoreRequest;
@@ -150,6 +151,8 @@ class TaskController extends Controller
         $task_comments = TaskComment::where('task_id', '=', $task->id)
             ->oldest()
             ->get();
+        $task_pictures = TaskPicture::where('task_id', '=', $task->id)
+            ->get();
 
         return view('tasks.edit', [
             'project' => $project,
@@ -159,6 +162,7 @@ class TaskController extends Controller
             'assigners' => $assigners,
             'task' => $task,
             'task_comments' => $task_comments,
+            'task_pictures' => $task_pictures,
         ]);
     }
 
