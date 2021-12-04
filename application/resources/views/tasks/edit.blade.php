@@ -161,15 +161,22 @@
                 </div>
             </div>
         </form>
-        
+
         {{-- 画像投稿機能ここから --}}
         <form name="uploadform" method="POST" action="{{ route('task_pictures.store', ['project' => $project->id, 'task' => $task]) }}" enctype="multipart/form-data">
             @csrf
-            <input type="file" id="file" name="file" class="form-control">
-            <button type="submit">アップロード</button>
+            <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
+                <!-- ドラッグ&ドロップエリア -->
+                <p>ファイルをドラッグ＆ドロップするかクリップボードから画像を貼り付けてください　または　
+                    <label for="file" class="inline-block p-3 border rounded bg-gray-300">ファイルを選択する</label>
+                    <input type="file" name="file" id="file" class="hidden">
+                </p>        
+            </div>
+            {{-- <button type="submit">アップロード</button> --}}
         </form>
-
+        
         {{-- 画像投稿機能ここまで --}}
+
         <form name="deleteform" method="POST" action="{{ route('tasks.destroy', ['project' => $project->id, 'task' => $task]) }}">
             @csrf
             @method('DELETE')
