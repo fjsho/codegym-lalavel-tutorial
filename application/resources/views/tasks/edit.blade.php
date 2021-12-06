@@ -230,7 +230,7 @@
             <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
                 @foreach ($task_pictures as $task_picture)
                     @break($loop->index > 4)
-                    <form name="deleteform" method="POST" action="{{ route('task_pictures.destroy', ['project' => $project->id, 'task' => $task->id, 'task_picture' => $task_picture]) }}">
+                    <form class="w-full" name="deleteform" method="POST" action="{{ route('task_pictures.destroy', ['project' => $project->id, 'task' => $task->id, 'task_picture' => $task_picture]) }}">
                         @csrf
                         @method('DELETE')
                         <div class="h-60">
