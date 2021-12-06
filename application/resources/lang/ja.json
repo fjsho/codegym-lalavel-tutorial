@@ -211,5 +211,6 @@
     "Picture uploaded successfully." : "画像を投稿しました。",
     "Failed to upload the picture." : "画像の投稿に失敗しました。",
     "Picture deleted successfully." : "画像を削除しました。",
-    "Failed to delete the picture." : "画像の削除に失敗しました。"
+    "Failed to delete the picture." : "画像の削除に失敗しました。",
+    "Picture should be JPG, PNG, or GIF images no larger than 10MB." : "画像には、10MB以下のJPG, PNG, GIF画像を添付してください"
 }

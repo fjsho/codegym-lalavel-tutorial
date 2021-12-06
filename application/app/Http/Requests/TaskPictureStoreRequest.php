@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PictureValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TaskPictureStoreRequest extends FormRequest
@@ -27,7 +28,7 @@ class TaskPictureStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|file|max:10240|mimes:jpg,png,gif',
+            'file' => ['required','file',new PictureValidation]
         ];
     }
 }
