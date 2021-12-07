@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Project;
 use App\Models\TaskPicture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TaskPictureStoreRequest;
 
 class TaskPictureController extends Controller
@@ -98,6 +99,7 @@ class TaskPictureController extends Controller
     public function destroy(Project $project, Task $task, TaskPicture $task_picture)
     {
         if ($task_picture->delete()) {
+            Storage::disk('public')->delete($task_picture['file_path']);
             $flash = ['success' => __('Picture deleted successfully.')];
         } else {
             $flash = ['error' => __('Failed to delete the picture.')];
