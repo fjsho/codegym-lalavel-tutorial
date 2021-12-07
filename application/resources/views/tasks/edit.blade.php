@@ -109,7 +109,7 @@
         
         if(typeof files[0] !== 'undefined') {
             // ファイルが正常に受け取れた際の処理
-            document.forms[uploadform].submit();
+            document.forms[`uploadform`].submit();
         } else {
             // ファイルが受け取れなかった際の処理
         }
@@ -234,7 +234,7 @@
                         @csrf
                         @method('DELETE')
                         <div class="h-60">
-                            <img src="/storage/{{$task_picture->file_path}}" alt="task_picture" class="w-full h-full object-contain">
+                            <img src="/storage/{{$task_picture->file_path}}" alt="{{$task_picture->file_path}}" class="w-full h-full object-contain">
                         </div>
                         <!-- Navigation -->
                         <div class="w-full h-full px-3 py-3">
