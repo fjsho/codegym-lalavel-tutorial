@@ -216,6 +216,54 @@
             </div>
         </form>
 
+        <form name="deleteform" method="POST" action="{{ route('tasks.destroy', ['project' => $project->id, 'task' => $task]) }}">
+            @csrf
+            @method('DELETE')
+            <!-- Navigation -->
+            <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-start">
+                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-select="modal-1">
+                    {{ __('Delete') }}
+                </x-button>
+            </div>
+
+            <!--Modal-->
+            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
+                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-1"></div>
+
+                <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-1">
+                        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                        <span class="text-sm">(Esc)</span>
+                    </div>
+
+                    <div class="modal-content py-4 text-left px-6">
+                        <div class="flex justify-between items-center pb-3">
+                            <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this task?') }}</p>
+                            <div class="modal-close cursor-pointer z-50" data-modal-select="modal-1">
+                                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <p>{{ __('Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.') }}</p>
+
+                        <div class="flex justify-end pt-2">
+                            <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-1">
+                                {{ __('Cancel') }}
+                            </x-link-button>
+                            <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                                {{ __('Delete') }}
+                            </x-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         {{-- 投稿画像表示欄ここから --}}
         <div class="mx-auto">
             <div class="overflow-hidden sm:rounded-lg">
@@ -284,7 +332,6 @@
                 @endforeach
             </div>
         </div>
-
         {{-- 投稿画像表示欄ここまで --}}
 
         {{-- 画像投稿機能ここから --}}
@@ -299,58 +346,9 @@
                 </p>        
             </div>
         </form>
-        
         {{-- 画像投稿機能ここまで --}}
 
-        <form name="deleteform" method="POST" action="{{ route('tasks.destroy', ['project' => $project->id, 'task' => $task]) }}">
-            @csrf
-            @method('DELETE')
-            <!-- Navigation -->
-            <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-start">
-                <x-button class="modal-open m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300" data-modal-select="modal-1">
-                    {{ __('Delete') }}
-                </x-button>
-            </div>
-
-            <!--Modal-->
-            <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-1">
-                <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-1"></div>
-
-                <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-
-                    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-1">
-                        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                        </svg>
-                        <span class="text-sm">(Esc)</span>
-                    </div>
-
-                    <div class="modal-content py-4 text-left px-6">
-                        <div class="flex justify-between items-center pb-3">
-                            <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this task?') }}</p>
-                            <div class="modal-close cursor-pointer z-50" data-modal-select="modal-1">
-                                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <p>{{ __('Are you sure you want to delete this task? Once a task is deleted, all of its resources and data will be permanently deleted.') }}</p>
-
-                        <div class="flex justify-end pt-2">
-                            <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-1">
-                                {{ __('Cancel') }}
-                            </x-link-button>
-                            <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
-                                {{ __('Delete') }}
-                            </x-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        {{-- 作業ここから --}}
+        {{-- コメント表示欄ここから --}}
         <div>
             {{-- ラベル --}}
             <div class="mx-auto">
@@ -453,7 +451,7 @@
                 </div>
             </form>
         </div>
-        {{-- 作業ここまで --}}
+        {{-- コメント表示欄ここまで --}}
 
     </div>
 </x-app-layout>
