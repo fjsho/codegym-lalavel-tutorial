@@ -39,7 +39,7 @@ class TaskPictureController extends Controller
     public function store(TaskPictureStoreRequest $request, Project $project, Task $task)
     {
         $file_name = $request->file('file')->getClientOriginalName();
-        $request->file('file')->storeAs('public',$file_name);
+        $request->file('file')->store('public');
 
         if (TaskPicture::create([
             'task_id' => $task->id,
