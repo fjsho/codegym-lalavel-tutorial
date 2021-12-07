@@ -79,30 +79,26 @@
 //ファイルアップロードに関する処理の記述
     // ドラッグ&ドロップエリアの取得
     let fileArea = document.getElementById('dropArea');
-
     // input[type=file]の取得
     let fileInput = document.getElementById('file');
+    //dragoverイベントに対する処理
+    function toggleDragOver(event){
+        event.preventDefault();
+        fileArea.classList.toggle('dragover');
+    };
 
-//ここから下のドラッグオーバー・ドラッグアウト・ドロップ時の処理はtoggleでまとめられそう
     // ドラッグオーバー時の処理
-    fileArea.addEventListener('dragover', function(e){
-        e.preventDefault();
-        fileArea.classList.add('dragover');
-    });
+    fileArea.addEventListener('dragover', toggleDragOver);
 
     // ドラッグアウト時の処理
-    fileArea.addEventListener('dragleave', function(e){
-        e.preventDefault();
-        fileArea.classList.remove('dragover');
-    });
+    fileArea.addEventListener('dragleave', toggleDragOver);
 
-    // ドロップ時の処理
-    fileArea.addEventListener('drop', function(e){
-        e.preventDefault();
-        fileArea.classList.remove('dragover');
+    // // ドロップ時の処理
+    fileArea.addEventListener('drop', function(event){
+        toggleDragOver(event);
 
         // ドロップしたファイルの取得
-        const files = e.dataTransfer.files;
+        let files = event.dataTransfer.files;
 
         // 取得したファイルをinput[type=file]へ
         fileInput.files = files;
@@ -115,12 +111,11 @@
         }
     });
 
-    // input[type=file]に変更があれば実行
-    // もちろんドロップ以外でも発火します
-    fileInput.addEventListener('change', function(e){
-        var file = e.target.files[0];
+    // クリックしてファイル選択した際の処理
+    fileInput.addEventListener('change', function(event){
+        const file = event.target.files[0];
         
-        if(typeof e.target.files[0] !== 'undefined') {
+        if(typeof event.target.files[0] !== 'undefined') {
             // ファイルが正常に受け取れた際の処理
             document.forms['uploadform'].submit();
         } else {
