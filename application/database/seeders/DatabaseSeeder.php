@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Task::factory(100)->create();
 
         \App\Models\TaskComment::factory(200)->create();
+
+        \App\Models\TaskPicture::factory(50)->create();
     }
 }
