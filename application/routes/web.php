@@ -4,6 +4,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskPictureController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +31,11 @@ require __DIR__.'/auth.php';
 Route::resource('projects', ProjectController::class)
     ->middleware(['auth']);
 
-Route::resource('projects/{project}/tasks', TaskController::class)
+Route::post('/projects/{project}/tasks/tmpStorePicture', [SessionController::class, 'tmpStorePicture'])
+    ->name('tasks.tmpStorePicture')
+    ->middleware(['auth']);
+
+    Route::resource('projects/{project}/tasks', TaskController::class)
     ->middleware(['auth']);
 
 Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentController::class)
