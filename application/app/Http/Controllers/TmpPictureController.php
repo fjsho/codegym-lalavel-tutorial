@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TaskPictureStoreRequest;
 
-class SessionController extends Controller
+class TmpPictureController extends Controller
 {
     /**
-     * store the picture temporarily.
+     * Store a newly created resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function tmpStorePicture(TaskPictureStoreRequest $request, Project $project)
+    public function store(Request $request, Project $project)
     {
         //投稿予定画像がある場合、セッション情報を一時的に保持する
         if($file = $request->file('file')){
@@ -35,12 +36,11 @@ class SessionController extends Controller
      * @param  \App\Models\TaskPicture  $taskPicture
      * @return \Illuminate\Http\Response
      */
-    public function destroyTmpPicture(Project $project, Request $request)
+    public function destroy(Project $project, Request $tmp_stored_picture_path)
     {
-        ddd($request, $project, session(),session('tmp_files.path'));
-        if (session()->has('tmp_files.path')) {
-            // Storage::disk('public/tmp')->delete($tmp_stored_picture_path);
-            // session()->forget('tmp_stored_picture_path',$tmp_stored_picture_path);
+        if (session()->has('tmp_stored_picture_path', $tmp_stored_picture_path)) {
+            Storage::disk('public/tmp')->delete($tmp_stored_picture_path);
+            session()->forget('tmp_stored_picture_path',$tmp_stored_picture_path);
             $flash = ['success' => __('Picture deleted successfully.')];
         } else {
             $flash = ['error' => __('Failed to delete the picture.')];

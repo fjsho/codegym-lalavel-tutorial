@@ -1,5 +1,91 @@
+{{-- @php
+    $file = $_FILES['file'];
+    var_dump($file);
+    $tmp_filepath = $file['tmp_name']; //一時保存先のパス
+    $filepath = '../storage/app/public/session/'.$file['name']; //保存先のパス→Laravelのドキュメントルートはpublicなので、publicフォルダを基準に保存先を設定する必要がある
+    $success = move_uploaded_file($tmp_filepath, $filepath);
+    // print($filepath);
+    // print($success);
+@endphp
+<img src="/storage/session/{{$file['name']}}" alt="error"> --}}
+
 @section('script')
 <script>
+// モーダルウィンドウに係る処理
+function toggleModal(event) {
+        const body = document.querySelector('body');
+        const modal = document.querySelectorAll('.modal');
+
+        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        const dataModalSelect = event.type === 'click' ?
+            //クリック：ボタンのdata-modal-select属性の値を取得
+            event.currentTarget.getAttribute('data-modal-select') :
+            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
+            document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
+
+        //各モーダルに対して判定を行う
+        for(let i = 0; i < modal.length; i++){
+            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
+            if(modal[i].getAttribute('data-modal') === dataModalSelect){
+                //メイン処理
+                //modalウィンドウの表示・非表示を切り替える
+                modal[i].classList.toggle('opacity-0');
+                //modalウィンドウのマウスイベントの有効・無効を切り替える
+                modal[i].classList.toggle('pointer-events-none');
+                //modal-activeクラスのオンオフを切り替える
+                body.classList.toggle('modal-active');
+            }
+        }
+    };
+
+    //modalウィンドウ表示時の背景
+    const overlay = document.querySelectorAll('.modal-overlay');
+    //背景をクリックするとモーダルが見えなくなる
+    for (var i = 0; i < overlay.length; i++) {
+        overlay[i].addEventListener('click', toggleModal);
+    }
+
+    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
+    var closeModal = document.querySelectorAll('.modal-close');
+    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
+    for (var i = 0; i < closeModal.length; i++) {
+        closeModal[i].addEventListener('click', toggleModal);
+    }
+
+    //モーダルを表示するボタン。複数あるためAllで取得
+    var openModal = document.querySelectorAll('.modal-open');
+    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
+    for (var i = 0; i < openModal.length; i++) {
+        openModal[i].addEventListener('click', function(event) {
+            //クリックイベントをキャンセル（削除処理をキャンセルしている）
+            event.preventDefault();
+            //モーダルウィンドウを表示
+            toggleModal(event);
+        })
+    }
+
+    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
+    //何かしらキーを押したら発火
+    document.onkeydown = function(evt) {
+        //もしイベントが空だったらwindow.eventを入れる
+        evt = evt || window.event;
+        var isEscape = false;
+        //Escキーが押された場合にisEscape変数をtrueにする処理
+        if ('key' in evt) {
+            //もしevt配列の"key"キーがtrueなら
+            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
+            isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
+        } else {
+            //"key"キーがfalseだったら
+            //"keyCode"キーに27を代入
+            isEscape = (evt.keyCode === 27);
+        }
+        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
+        if (isEscape && document.body.classList.contains('modal-active')) {
+            toggleModal(evt);
+        }
+    };
+
 //ファイルアップロードに関する処理の記述
     // ドラッグ&ドロップエリアの取得
     let fileArea = document.getElementById('dropArea');
@@ -38,7 +124,7 @@
     // クリックしてファイル選択した際の処理
     fileInput.addEventListener('change', function(event){
         const file = event.target.files[0];
-        
+        console.log(file);
         if(typeof event.target.files[0] !== 'undefined') {
             // ファイルが正常に受け取れた際の処理
             document.forms[`uploadform`].submit();
@@ -153,16 +239,14 @@
     </div>
     <div class="px-3 pt-3 mx-6 mb-3 rounded-md">
         <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
-            {{-- {{ddd(session('tmp_store_picture'))}} --}}
-            {{-- @if(null) --}}
-            @if(session('tmp_store_picture'))
-                @foreach (session('tmp_store_picture') as $tmp_store_picture)
+            @if(session('tmp_files.path'))
+                @foreach (session('tmp_files.path') as $tmp_file)
                     @break($loop->iteration > 5)
-                    {{-- <form class="w-full" name="deleteform" method="POST" action="{{ route('task_pictures.destroy', ['project' => $project->id, 'task_picture' => $task_picture]) }}"> --}}
-                        {{-- @csrf --}}
-                        {{-- @method('DELETE') --}}
+                    <form class="w-full" name="deleteform" method="POST" action="{{ route('tasks.destroyTmpPicture', ['project' => $project->id]) }}">
+                        @csrf
+                        @method('DELETE')
                         <div class="h-60">
-                            <img src="{{$tmp_store_picture}}" alt="{{$tmp_store_picture}}" class="w-full h-full object-contain">
+                            <img src="/storage/tmp/{{$tmp_file}}" alt="{{$tmp_file}}" class="w-full h-full object-contain">
                         </div>
                         <!-- Navigation -->
                         <div class="w-full h-full px-3 py-3">
@@ -208,7 +292,7 @@
                                 </div>
                             </div>
                         </div>
-                    {{-- </form> --}}
+                    </form>
                 @endforeach
             @endif
         </div>
@@ -216,7 +300,7 @@
     {{-- 投稿画像表示欄ここまで --}}
 
     {{-- 画像投稿機能ここから --}}
-    <form name="uploadform" method="POST" action="{{ route('tasks.tmpStorePicture', ['project' => $project->id]) }}" enctype="multipart/form-data">
+    <form name="uploadform" method="POST" action="{{ route('tmpPicture.store', ['project' => $project->id]) }}" enctype="multipart/form-data">
         @csrf
         <!-- ドラッグ&ドロップエリア -->
         <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">

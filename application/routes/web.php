@@ -4,6 +4,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskPictureController;
+use App\Http\Controllers\TmpPictureController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +36,17 @@ Route::post('/projects/{project}/tasks/tmpStorePicture', [SessionController::cla
     ->name('tasks.tmpStorePicture')
     ->middleware(['auth']);
 
-    Route::resource('projects/{project}/tasks', TaskController::class)
+Route::delete('/projects/{project}/tasks/destroyTmpPicture', [SessionController::class, 'destroyTmpPicture'])
+    ->name('tasks.destroyTmpPicture')
+    ->middleware(['auth']);
+
+Route::resource('projects/{project}/tasks/create/tmpPicture', TmpPictureController::class)
+    ->middleware(['auth']);
+
+Route::post('projects/{project}/tasks/create', [TaskController::class, 'create'])
+    ->middleware(['auth']);
+
+Route::resource('projects/{project}/tasks', TaskController::class)
     ->middleware(['auth']);
 
 Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentController::class)
@@ -43,3 +54,4 @@ Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentCont
 
 Route::resource('projects/{project}/tasks/{task}/task_pictures', TaskPictureController::class)
     ->middleware(['auth']);
+

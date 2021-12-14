@@ -12,6 +12,7 @@ use App\Models\TaskPicture;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskPictureStoreRequest;
 use App\Http\Requests\TaskUpdateRequest;
 
 class TaskController extends Controller
@@ -79,7 +80,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Project $project)
+    public function create(Request $request, Project $project)
     {
         $task_kinds = TaskKind::all();
         $task_statuses = TaskStatus::all();
