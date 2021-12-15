@@ -51,7 +51,8 @@ class TaskPictureController extends Controller
             $flash = ['error' => __('Failed to upload the picture.')];
         }
 
-        return redirect()->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
+        return redirect()
+            ->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
             ->with($flash);
     }
 

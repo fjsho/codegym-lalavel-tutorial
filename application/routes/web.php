@@ -5,7 +5,6 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskPictureController;
 use App\Http\Controllers\TmpPictureController;
-use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,15 +31,12 @@ require __DIR__.'/auth.php';
 Route::resource('projects', ProjectController::class)
     ->middleware(['auth']);
 
-Route::post('/projects/{project}/tasks/tmpStorePicture', [SessionController::class, 'tmpStorePicture'])
-    ->name('tasks.tmpStorePicture')
+Route::post('/projects/{project}/tasks/storeTmpPicture', [TmpPictureController::class, 'storeTmpPicture'])
+    ->name('tasks.storeTmpPicture')
     ->middleware(['auth']);
 
-Route::delete('/projects/{project}/tasks/destroyTmpPicture', [SessionController::class, 'destroyTmpPicture'])
+Route::delete('/projects/{project}/tasks/destroyTmpPicture', [TmpPictureController::class, 'destroyTmpPicture'])
     ->name('tasks.destroyTmpPicture')
-    ->middleware(['auth']);
-
-Route::resource('projects/{project}/tasks/create/tmpPicture', TmpPictureController::class)
     ->middleware(['auth']);
 
 Route::post('projects/{project}/tasks/create', [TaskController::class, 'create'])

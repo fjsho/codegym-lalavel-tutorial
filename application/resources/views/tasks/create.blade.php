@@ -55,23 +55,23 @@ function toggleModal(event) {
 
     //Escボタンを押した時の処理（モーダルウィンドウを非表示）
     //何かしらキーを押したら発火
-    document.onkeydown = function(evt) {
+    document.onkeydown = function(event) {
         //もしイベントが空だったらwindow.eventを入れる
-        evt = evt || window.event;
+        event = event || window.event;
         var isEscape = false;
         //Escキーが押された場合にisEscape変数をtrueにする処理
-        if ('key' in evt) {
-            //もしevt配列の"key"キーがtrueなら
+        if ('key' in event) {
+            //もしevent配列の"key"キーがtrueなら
             //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
-            isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
+            isEscape = (event.key === 'Escape' || event.key === 'Esc');
         } else {
             //"key"キーがfalseだったら
             //"keyCode"キーに27を代入
-            isEscape = (evt.keyCode === 27);
+            isEscape = (event.keyCode === 27);
         }
         //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
-            toggleModal(evt);
+            toggleModal(event);
         }
     };
 
@@ -88,25 +88,20 @@ function toggleModal(event) {
 
     // ドラッグオーバー時の処理
     fileArea.addEventListener('dragover', toggleDragOver);
-
     // ドラッグアウト時の処理
     fileArea.addEventListener('dragleave', toggleDragOver);
-
-    // // ドロップ時の処理
+    // ドロップ時の処理
     fileArea.addEventListener('drop', function(event){
         toggleDragOver(event);
 
         // ドロップしたファイルの取得
         let files = event.dataTransfer.files;
-
         // 取得したファイルをinput[type=file]へ
         fileInput.files = files;
         
+        //ファイルがundefinedでなければ、コントローラへファイルをsubmitする
         if(typeof files[0] !== 'undefined') {
-            // ファイルが正常に受け取れた際の処理
             document.forms[`uploadform`].submit();
-        } else {
-            // ファイルが受け取れなかった際の処理
         }
     });
 
@@ -117,13 +112,6 @@ function toggleModal(event) {
         if(typeof event.target.files[0] !== 'undefined') {
             // ファイルが正常に受け取れた際の処理
             document.forms[`uploadform`].submit();
-
-            //JSで対応する場合の検討中コード
-            // let reader = new FileReader();
-            // reader.onload = function (event) {
-            //     document.getElementById('preview').setAttribute('src', event.target.result)
-            // }
-            // reader.readAsDataURL(event.target.files[0]);
         } else {
             // ファイルが受け取れなかった際の処理
         }
@@ -161,6 +149,7 @@ function toggleModal(event) {
         <form method="POST" action="{{ route('tasks.store', ['project' => $project->id]) }}">
             @csrf
             <!-- Validation Errors -->
+            <x-flash-message />
             <x-validation-errors :errors="$errors" />
 
             <!-- Navigation -->
@@ -291,7 +280,7 @@ function toggleModal(event) {
     {{-- 投稿画像表示欄ここまで --}}
 
     {{-- 画像投稿機能ここから --}}
-    <form name="uploadform" method="POST" action="{{ route('tasks.tmpStorePicture', ['project' => $project->id]) }}" enctype="multipart/form-data">
+    <form name="uploadform" method="POST" action="{{ route('tasks.storeTmpPicture', ['project' => $project->id]) }}" enctype="multipart/form-data">
         @csrf
         <!-- ドラッグ&ドロップエリア -->
         <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
