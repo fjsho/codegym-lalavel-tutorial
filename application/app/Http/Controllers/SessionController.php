@@ -37,15 +37,22 @@ class SessionController extends Controller
      */
     public function destroyTmpPicture(Project $project, Request $request)
     {
-        ddd($request, $project, session(),session('tmp_files.path'));
-        if (session()->has('tmp_files.path')) {
-            // Storage::disk('public/tmp')->delete($tmp_stored_picture_path);
-            // session()->forget('tmp_stored_picture_path',$tmp_stored_picture_path);
+        // ddd($request,
+        //  $request->session(),
+        //  $request->input('tmp_file_id'));
+
+        $index = $request->input('tmp_file_id');
+        if (session()->has('tmp_files.path.'.$index)) {
+            //ファイルを削除
+            $tmp_file_path = $request->session()->get('tmp_files.path.'.$index);
+            Storage::disk('public')->delete('tmp/'.$tmp_file_path);
+            //セッションを削除
+            session()->forget('tmp_files.path.'.$index);
+            session()->forget('tmp_files.name.'.$index);
             $flash = ['success' => __('Picture deleted successfully.')];
         } else {
             $flash = ['error' => __('Failed to delete the picture.')];
         }
-
         return redirect()->route('tasks.create', ['project' => $project->id])
             ->with($flash);
     }

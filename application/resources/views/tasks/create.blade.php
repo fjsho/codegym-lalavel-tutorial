@@ -286,6 +286,7 @@ function toggleModal(event) {
                                             {{ __('Cancel') }}
                                         </x-link-button>
                                         <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                                            <input type="hidden" id="tmp_file_id" name="tmp_file_id" value="{{$loop->index}}">
                                             {{ __('Delete') }}
                                         </x-button>
                                     </div>
