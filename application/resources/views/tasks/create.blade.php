@@ -1,14 +1,3 @@
-{{-- @php
-    $file = $_FILES['file'];
-    var_dump($file);
-    $tmp_filepath = $file['tmp_name']; //一時保存先のパス
-    $filepath = '../storage/app/public/session/'.$file['name']; //保存先のパス→Laravelのドキュメントルートはpublicなので、publicフォルダを基準に保存先を設定する必要がある
-    $success = move_uploaded_file($tmp_filepath, $filepath);
-    // print($filepath);
-    // print($success);
-@endphp
-<img src="/storage/session/{{$file['name']}}" alt="error"> --}}
-
 @section('script')
 <script>
 // モーダルウィンドウに係る処理
@@ -239,14 +228,15 @@ function toggleModal(event) {
     </div>
     <div class="px-3 pt-3 mx-6 mb-3 rounded-md">
         <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
-            @if(session('tmp_files.path'))
-                @foreach (session('tmp_files.path') as $tmp_file)
+            {{-- {{ddd(session('tmp_files'))}} --}}
+            @if(session('tmp_files'))
+                @foreach(session('tmp_files') as $name => $path)
                     @break($loop->iteration > 5)
                     <form class="w-full" name="deleteform" method="POST" action="{{ route('tasks.destroyTmpPicture', ['project' => $project->id]) }}">
                         @csrf
                         @method('DELETE')
                         <div class="h-60">
-                            <img src="/storage/tmp/{{$tmp_file}}" alt="{{$tmp_file}}" class="w-full h-full object-contain">
+                            <img src="/storage/tmp/{{$path}}" alt="{{$path}}" class="w-full h-full object-contain">
                         </div>
                         <!-- Navigation -->
                         <div class="w-full h-full px-3 py-3">
@@ -286,7 +276,7 @@ function toggleModal(event) {
                                             {{ __('Cancel') }}
                                         </x-link-button>
                                         <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
-                                            <input type="hidden" id="tmp_file_id" name="tmp_file_id" value="{{$loop->index}}">
+                                            <input type="hidden" id="tmp_file_name" name="tmp_file_name" value="{{$name}}">
                                             {{ __('Delete') }}
                                         </x-button>
                                     </div>
@@ -301,7 +291,7 @@ function toggleModal(event) {
     {{-- 投稿画像表示欄ここまで --}}
 
     {{-- 画像投稿機能ここから --}}
-    <form name="uploadform" method="POST" action="{{ route('tmpPicture.store', ['project' => $project->id]) }}" enctype="multipart/form-data">
+    <form name="uploadform" method="POST" action="{{ route('tasks.tmpStorePicture', ['project' => $project->id]) }}" enctype="multipart/form-data">
         @csrf
         <!-- ドラッグ&ドロップエリア -->
         <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
