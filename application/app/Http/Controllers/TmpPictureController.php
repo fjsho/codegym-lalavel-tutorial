@@ -19,9 +19,7 @@ class TmpPictureController extends Controller
     {
         //投稿予定画像がある場合、セッション情報を一時的に保持する
         if($file = $request->file('file')){
-            //キー名としてランダムな名前を付与
             $tmp_file_name = Str::random(20);
-            //storage/app/public/tmpにファイルを保存し、パスを取得
             $tmp_file_path = basename($file->store('public/tmp'));
             $request->session()->put('tmp_files.'.$tmp_file_name, $tmp_file_path);
 
@@ -45,7 +43,6 @@ class TmpPictureController extends Controller
     {
         $tmp_file_name = $request->input('tmp_file_name');
         if (session()->has('tmp_files.'.$tmp_file_name)) {
-            //セッションからパスを取り出してファイルを削除
             $tmp_file_path = $request->session()->pull('tmp_files.'.$tmp_file_name);
             Storage::disk('public')->delete('tmp/'.$tmp_file_path);
 

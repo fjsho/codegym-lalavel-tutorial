@@ -79,12 +79,20 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Project $project)
+    public function create(Request $request, Project $project)
     {
         $task_kinds = TaskKind::all();
         $task_statuses = TaskStatus::all();
         $task_categories = TaskCategory::all();
         $assigners = User::all();
+
+        // 遷移元がtasks.create以外ならtmp_filesのセッションを破棄する処理
+        //（投稿画像の一時保存及び破棄時、store失敗時、更新ボタン押下時に一時保存画像を残すことを想定した）
+        $referer_url = $request->header('referer');
+        $tasks_create_url = route('tasks.create', ['project' => $project->id]); 
+        if ($referer_url !== $tasks_create_url) {
+            $request->session()->forget('tmp_files'); 
+        }
 
         return view('tasks.create', [
             'project' => $project,
