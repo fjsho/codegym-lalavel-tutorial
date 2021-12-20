@@ -1,119 +1,85 @@
 @section('script')
 <script>
-// モーダルウィンドウに係る処理
+// モーダルウィンドウの表示・非表示切り替え
 function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
 
-        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        //Escキーでモーダルを閉じる処理に対応するためイベントに応じて格納内容を分岐させた
+        //→キーダウンイベントではcurrentTarget.getAttribute()が使えなかったため 
         const dataModalSelect = event.type === 'click' ?
-            //クリック：ボタンのdata-modal-select属性の値を取得
             event.currentTarget.getAttribute('data-modal-select') :
-            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
             document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
 
-        //各モーダルに対して判定を行う
+        //メイン処理
         for(let i = 0; i < modal.length; i++){
-            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
             if(modal[i].getAttribute('data-modal') === dataModalSelect){
-                //メイン処理
-                //modalウィンドウの表示・非表示を切り替える
                 modal[i].classList.toggle('opacity-0');
-                //modalウィンドウのマウスイベントの有効・無効を切り替える
                 modal[i].classList.toggle('pointer-events-none');
-                //modal-activeクラスのオンオフを切り替える
                 body.classList.toggle('modal-active');
             }
         }
     };
 
-    //modalウィンドウ表示時の背景
+    //以下イベントの発火条件設定
     const overlay = document.querySelectorAll('.modal-overlay');
-    //背景をクリックするとモーダルが見えなくなる
-    for (var i = 0; i < overlay.length; i++) {
+    for (let i = 0; i < overlay.length; i++) {
         overlay[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
-    var closeModal = document.querySelectorAll('.modal-close');
-    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
-    for (var i = 0; i < closeModal.length; i++) {
+    let closeModal = document.querySelectorAll('.modal-close');
+    for (let i = 0; i < closeModal.length; i++) {
         closeModal[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを表示するボタン。複数あるためAllで取得
-    var openModal = document.querySelectorAll('.modal-open');
-    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
-    for (var i = 0; i < openModal.length; i++) {
+    let openModal = document.querySelectorAll('.modal-open');
+    for (let i = 0; i < openModal.length; i++) {
         openModal[i].addEventListener('click', function(event) {
-            //クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
-            //モーダルウィンドウを表示
             toggleModal(event);
         })
     }
 
-    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
-    //何かしらキーを押したら発火
     document.onkeydown = function(event) {
-        //もしイベントが空だったらwindow.eventを入れる
         event = event || window.event;
-        var isEscape = false;
-        //Escキーが押された場合にisEscape変数をtrueにする処理
+        let isEscape = false;
         if ('key' in event) {
-            //もしevent配列の"key"キーがtrueなら
-            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
             isEscape = (event.key === 'Escape' || event.key === 'Esc');
         } else {
-            //"key"キーがfalseだったら
-            //"keyCode"キーに27を代入
             isEscape = (event.keyCode === 27);
         }
-        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
             toggleModal(event);
         }
     };
 
-//ファイルアップロードに関する処理の記述
-    // ドラッグ&ドロップエリアの取得
-    let fileArea = document.getElementById('dropArea');
-    // input[type=file]の取得
+//ドラッグ＆ドロップ対応ファイルアップロード
+    const fileArea = document.getElementById('dropArea');
     let fileInput = document.getElementById('file');
-    //dragoverイベントに対する処理
+
     function toggleDragOver(event){
         event.preventDefault();
         fileArea.classList.toggle('dragover');
     };
 
-    // ドラッグオーバー時の処理
     fileArea.addEventListener('dragover', toggleDragOver);
-    // ドラッグアウト時の処理
     fileArea.addEventListener('dragleave', toggleDragOver);
-    // ドロップ時の処理
+
+    //ドロップでファイルを選択した場合
     fileArea.addEventListener('drop', function(event){
         toggleDragOver(event);
-
-        // ドロップしたファイルの取得
-        let files = event.dataTransfer.files;
-        // 取得したファイルをinput[type=file]へ
-        fileInput.files = files;
-        
-        //ファイルがundefinedでなければ、コントローラへファイルをsubmitする
+        const files = event.dataTransfer.files;
+        fileInput.files = files;        
         if(typeof files[0] !== 'undefined') {
             document.forms[`uploadform`].submit();
         }
     });
 
-    // クリックしてファイル選択した際の処理
+    // クリックしてファイル選択した場合
     fileInput.addEventListener('change', function(event){
         const file = event.target.files[0];
-        console.log(file);
         if(typeof event.target.files[0] !== 'undefined') {
-            // ファイルが正常に受け取れた際の処理
             document.forms[`uploadform`].submit();
-        } else {
-            // ファイルが受け取れなかった際の処理
         }
     }, false);
 
@@ -205,7 +171,7 @@ function toggleModal(event) {
         </form>
     </div>
 
-    {{-- 投稿画像表示欄ここから --}}
+    <!-- 画像表示 -->
     <div class="mx-auto">
         <div class="overflow-hidden sm:rounded-lg">
             <div class="px-6 py-3">
@@ -217,7 +183,6 @@ function toggleModal(event) {
     </div>
     <div class="px-3 pt-3 mx-6 mb-3 rounded-md">
         <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
-            {{-- {{ddd(session('tmp_files'))}} --}}
             @if(session('tmp_files'))
                 @foreach(session('tmp_files') as $name => $path)
                     @break($loop->iteration > 5)
@@ -277,19 +242,17 @@ function toggleModal(event) {
             @endif
         </div>
     </div>
-    {{-- 投稿画像表示欄ここまで --}}
 
-    {{-- 画像投稿機能ここから --}}
+    <!-- 画像投稿 -->
     <form name="uploadform" method="POST" action="{{ route('tasks.storeTmpPicture', ['project' => $project->id]) }}" enctype="multipart/form-data">
         @csrf
         <!-- ドラッグ&ドロップエリア -->
         <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
-            {{-- ここ要英語化 --}}
+            {{--@TODO 英語化 --}}
             <p>ファイルをドラッグ＆ドロップするかクリップボードから画像を貼り付けてください　または　
                 <label for="file" class="inline-block p-3 border rounded bg-gray-300">ファイルを選択する</label>
                 <input type="file" name="file" id="file" class="hidden">
             </p>        
         </div>
     </form>
-    {{-- 画像投稿機能ここまで --}}
 </x-app-layout>
