@@ -210,6 +210,8 @@
     "Are you sure you want to delete this picture? Once a picture is deleted, all of its resources and data will be permanently deleted." : "本当に画像を削除してよろしいでしょうか？一度画像を削除すると、すべてのリソースとデータは永久に削除されます。",
     "Picture uploaded successfully." : "画像を投稿しました。",
     "Failed to upload the picture." : "画像の投稿に失敗しました。",
+    "Picture added successfully." : "画像を追加しました。",
+    "Failed to add the picture." : "画像の追加に失敗しました。",
     "Picture deleted successfully." : "画像を削除しました。",
     "Failed to delete the picture." : "画像の削除に失敗しました。",
     "Picture should be JPG, PNG, or GIF images no larger than 10MB." : "画像には、10MB以下のJPG, PNG, GIF画像を添付してください"

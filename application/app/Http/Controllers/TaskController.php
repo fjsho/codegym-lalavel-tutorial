@@ -136,11 +136,11 @@ class TaskController extends Controller
                     $result[] = TaskPicture::storeTmpPicture($task->id, $tmp_file_path, $created_user_id);
                 }
                 if(in_array('error', $result, true)){
-                    $flash = array_merge($flash,array('error' => __('Failed to store picture.'))); //@TODO：日本語化
+                    $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
                 } 
             }
         } else {
-            $flash = ['error' => __('Failed to create the task.')]; //@TODO：日本語化
+            $flash = ['error' => __('Failed to create the task.')];
         }
 
         return redirect()->route('tasks.index', ['project' => $project->id])
