@@ -68,9 +68,9 @@ class TaskPicture extends Model
         'file_path' => $file_path,
         'created_user_id' => $created_user_id,
         ])){
-            $result = 'success';
+            $result = ['success' => __('Picture stored successfully.')];
         } else {
-            $result = 'error';
+            $result = ['error' => __('Failed to store picture.')];
         };
 
         return $result;

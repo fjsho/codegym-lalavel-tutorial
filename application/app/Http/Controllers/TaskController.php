@@ -126,19 +126,21 @@ class TaskController extends Controller
             'created_user_id' => $created_user_id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
-        } else {
-            $flash = ['error' => __('Failed to create the task.')];
-        }
-
-        if($request->session()->has('tmp_files')) {
-            $tmp_file_names = array_keys(session('tmp_files'));
-            foreach($tmp_file_names as $tmp_file_name){
-                //tmpディレクトリの対象画像をpublcディレクトリに移動させる
-                $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
-                //対象画像の情報をtask_picturesテーブルに保存する
-                TaskPicture::storeTmpPicture($task->id, $tmp_file_path, $created_user_id);
+            //@CHECK：このif文はファンクションにして外に出した方がいいだろうか？
+            if($request->session()->has('tmp_files')) {
+                $tmp_file_names = array_keys(session('tmp_files'));
+                foreach($tmp_file_names as $tmp_file_name){
+                    //tmpディレクトリの対象画像をpublcディレクトリに移動させる
+                    $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
+                    //対象画像の情報をtask_picturesテーブルに保存する
+                    $result[] = TaskPicture::storeTmpPicture($task->id, $tmp_file_path, $created_user_id);
+                }
+                if(in_array('error', $result, true)){
+                    $flash = array_merge($flash,array('error' => __('Failed to store picture.'))); //@TODO：日本語化
+                } 
             }
-            
+        } else {
+            $flash = ['error' => __('Failed to create the task.')]; //@TODO：日本語化
         }
 
         return redirect()->route('tasks.index', ['project' => $project->id])
