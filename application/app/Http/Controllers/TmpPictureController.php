@@ -17,7 +17,7 @@ class TmpPictureController extends Controller
      */
     public function storeTmpPicture(TaskPictureStoreRequest $request, Project $project)
     {
-        //投稿予定画像がある場合、セッション情報を一時的に保持する
+        //投稿予定画像がある場合、tmpディレクトリに画像を保存し、セッション情報を一時的に保持する
         if($file = $request->file('file')){
             $tmp_file_name = Str::random(20);
             $tmp_file_path = basename($file->store('public/tmp'));

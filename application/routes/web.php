@@ -31,18 +31,18 @@ require __DIR__.'/auth.php';
 Route::resource('projects', ProjectController::class)
     ->middleware(['auth']);
 
+Route::post('projects/{project}/tasks/create', [TaskController::class, 'create'])
+    ->middleware(['auth']);
+
+Route::resource('projects/{project}/tasks', TaskController::class)
+    ->middleware(['auth']);
+
 Route::post('/projects/{project}/tasks/storeTmpPicture', [TmpPictureController::class, 'storeTmpPicture'])
     ->name('tasks.storeTmpPicture')
     ->middleware(['auth']);
 
 Route::delete('/projects/{project}/tasks/destroyTmpPicture', [TmpPictureController::class, 'destroyTmpPicture'])
     ->name('tasks.destroyTmpPicture')
-    ->middleware(['auth']);
-
-Route::post('projects/{project}/tasks/create', [TaskController::class, 'create'])
-    ->middleware(['auth']);
-
-Route::resource('projects/{project}/tasks', TaskController::class)
     ->middleware(['auth']);
 
 Route::resource('projects/{project}/tasks/{task}/task_comments', TaskCommentController::class)

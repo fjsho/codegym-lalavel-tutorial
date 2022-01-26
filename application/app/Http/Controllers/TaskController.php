@@ -112,8 +112,9 @@ class TaskController extends Controller
     public function store(TaskStoreRequest $request, Project $project)
     {
         $validated = $request->validated();
+        $created_user_id = $request->user()->id;
 
-        if (Task::create([
+        if ($task = Task::create([
             'project_id' => $project->id,
             'task_kind_id' => $validated['task_kind_id'],
             'name' => $validated['name'],
@@ -122,11 +123,22 @@ class TaskController extends Controller
             'assigner_id' => $validated['assigner_id'],
             'task_category_id' => $validated['task_category_id'],
             'due_date' => $validated['due_date'],
-            'created_user_id' => $request->user()->id,
+            'created_user_id' => $created_user_id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
         } else {
             $flash = ['error' => __('Failed to create the task.')];
+        }
+
+        if($request->session()->has('tmp_files')) {
+            $tmp_file_names = array_keys(session('tmp_files'));
+            foreach($tmp_file_names as $tmp_file_name){
+                //tmpディレクトリの対象画像をpublcディレクトリに移動させる
+                $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
+                //対象画像の情報をtask_picturesテーブルに保存する
+                TaskPicture::storeTmpPicture($task->id, $tmp_file_path, $created_user_id);
+            }
+            
         }
 
         return redirect()->route('tasks.index', ['project' => $project->id])
