@@ -17,15 +17,26 @@ class TmpPictureController extends Controller
      */
     public function storeTmpPicture(TaskPictureStoreRequest $request, Project $project)
     {
-        //投稿予定画像がある場合、tmpディレクトリに画像を保存し、セッション情報を一時的に保持する
-        if($file = $request->file('file')){
-            $tmp_file_name = Str::random(20);
-            $tmp_file_path = basename($file->store('public/tmp'));
-            $request->session()->put('tmp_files.'.$tmp_file_name, $tmp_file_path);
-
-            $flash = ['success' => __('Picture added successfully.')];
+        if($tmp_files_array = $request->session()->get('tmp_files')){
+            $tmp_files_count = count($tmp_files_array);
         } else {
-            $flash = ['error' => __('Failed to add the picture.')];
+            $tmp_files_count = 0;
+        };
+
+        //投稿予定画像は5枚まで。
+        if($tmp_files_count >= 5){
+            $flash = ['error' => __('Please limit the number of attached picture to 5 or less.')];
+        } else {
+            //投稿予定画像がある場合、tmpディレクトリに画像を保存し、セッション情報を一時的に保持する
+            if($file = $request->file('file')){
+                $tmp_file_name = Str::random(20);
+                $tmp_file_path = basename($file->store('public/tmp'));
+                $request->session()->put('tmp_files.'.$tmp_file_name, $tmp_file_path);
+
+                $flash = ['success' => __('Picture added successfully.')];
+            } else {
+                $flash = ['error' => __('Failed to add the picture.')];
+            }
         }
 
         return redirect()
