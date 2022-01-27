@@ -63,15 +63,20 @@ class TaskPicture extends Model
      */
     public static function storePicture($task_id, $file_path, $created_user_id)
     {
-        if(TaskPicture::create([
-        'task_id' => $task_id,
-        'file_path' => $file_path,
-        'created_user_id' => $created_user_id,
-        ])){
-            $result = ['success' => __('Picture uploaded successfully.')];
+        $count_stored_pictures = TaskPicture::where('task_id', '=', $task_id)->count();
+        if($count_stored_pictures >= 5){
+            $result = ['error' => __('Please limit the number of attached picture to 5 or less.')];
         } else {
-            $result = ['error' => __('Failed to upload the picture.')];
-        };
+            if(TaskPicture::create([
+                'task_id' => $task_id,
+                'file_path' => $file_path,
+                'created_user_id' => $created_user_id,
+                ])){
+                    $result = ['success' => __('Picture uploaded successfully.')];
+                } else {
+                    $result = ['error' => __('Failed to upload the picture.')];
+            };
+        }
 
         return $result;
     }
