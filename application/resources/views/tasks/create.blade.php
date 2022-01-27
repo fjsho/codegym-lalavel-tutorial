@@ -185,7 +185,6 @@ function toggleModal(event) {
         <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
             @if(session('tmp_files'))
                 @foreach(session('tmp_files') as $name => $path)
-                    @break($loop->iteration > 5)
                     <form class="w-full" name="deleteform" method="POST" action="{{ route('tasks.destroyTmpPicture', ['project' => $project->id]) }}">
                         @csrf
                         @method('DELETE')
