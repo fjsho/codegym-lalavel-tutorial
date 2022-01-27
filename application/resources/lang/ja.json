@@ -215,5 +215,7 @@
     "Picture deleted successfully." : "画像を削除しました。",
     "Failed to delete the picture." : "画像の削除に失敗しました。",
     "Picture should be JPG, PNG, or GIF images no larger than 10MB." : "画像には、10MB以下のJPG, PNG, GIF画像を添付してください",
-    "Please limit the number of attached picture to 5 or less." : "添付画像は５枚以下にしてください。"
+    "Please limit the number of attached picture to 5 or less." : "添付画像は５枚以下にしてください。",
+    "Please drag and drop a file or paste an image from the clipboard or" : "ファイルをドラッグ＆ドロップするかクリップボードから画像を貼り付けてください　または　",
+    "File Select" : "ファイルを選択する"
 }

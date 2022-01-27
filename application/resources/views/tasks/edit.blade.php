@@ -334,8 +334,8 @@
             <!-- ドラッグ&ドロップエリア -->
             <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
                 {{-- ここ要英語化 --}}
-                <p>ファイルをドラッグ＆ドロップするかクリップボードから画像を貼り付けてください　または　
-                    <label for="file" class="inline-block p-3 border rounded bg-gray-300">ファイルを選択する</label>
+                <p>{{ __('Please drag and drop a file or paste an image from the clipboard or') }}
+                    <label for="file" class="inline-block p-3 border rounded bg-gray-300">{{ __('File Select') }}</label>
                     <input type="file" name="file" id="file" class="hidden">
                 </p>        
             </div>
