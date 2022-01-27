@@ -133,7 +133,7 @@ class TaskController extends Controller
                     //tmpディレクトリの対象画像をpublcディレクトリに移動させる
                     $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
                     //対象画像の情報をtask_picturesテーブルに保存する
-                    $result[] = TaskPicture::storeTmpPicture($task->id, $tmp_file_path, $created_user_id);
+                    $result[] = TaskPicture::storePicture($task->id, $tmp_file_path, $created_user_id);
                 }
                 if(in_array('error', $result, true)){
                     $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));

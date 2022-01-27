@@ -59,9 +59,9 @@ class TaskPicture extends Model
     }
 
     /**
-     * 一時保存画像を本登録
+     * 画像をテーブルに登録する
      */
-    public static function storeTmpPicture($task_id, $file_path, $created_user_id)
+    public static function storePicture($task_id, $file_path, $created_user_id)
     {
         if(TaskPicture::create([
         'task_id' => $task_id,

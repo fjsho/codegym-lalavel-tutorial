@@ -40,16 +40,8 @@ class TaskPictureController extends Controller
     public function store(TaskPictureStoreRequest $request, Project $project, Task $task)
     {
         $file_path = basename($request->file('file')->store('public'));
-
-        if (TaskPicture::create([
-            'task_id' => $task->id,
-            'file_path' => $file_path,
-            'created_user_id' => $request->user()->id,
-        ])) {
-            $flash = ['success' => __('Picture uploaded successfully.')];
-        } else {
-            $flash = ['error' => __('Failed to upload the picture.')];
-        }
+        $result = TaskPicture::storePicture($task->id, $file_path, $request->user()->id);
+        $flash = $result;
 
         return redirect()
             ->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
