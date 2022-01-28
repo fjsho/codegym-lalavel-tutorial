@@ -38,7 +38,6 @@ class TmpPictureController extends Controller
                 $flash = ['error' => __('Failed to add the picture.')];
             }
         }
-
         return redirect()
             ->route('tasks.create', ['project' => $project->id])
             ->with($flash);
@@ -50,7 +49,7 @@ class TmpPictureController extends Controller
      * @param  \App\Models\TaskPicture  $taskPicture
      * @return \Illuminate\Http\Response
      */
-    public function destroyTmpPicture(Project $project, Request $request)
+    public function destroyTmpPicture(Request $request, Project $project)
     {
         $tmp_file_name = $request->input('tmp_file_name');
         if (session()->has('tmp_files.'.$tmp_file_name)) {

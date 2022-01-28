@@ -137,7 +137,7 @@ function toggleModal(event) {
 
                     <div class="md:w-full px-3 mb-6">
                         <x-label for="name" :value="__('Task Name')" class="{{ $errors->has('name') ? 'text-red-600' :'' }}" />
-                        <x-input id="name" class="block mt-1 w-full {{ $errors->has('name') ? 'border-red-600' :'' }}" type="text" name="name" :value="old('name')" placeholder="課題名" required autofocus />
+                        <x-input id="name" class="block mt-1 w-full {{ $errors->has('name') ? 'border-red-600' :'' }}" type="text" name="name" :value="old('name')" placeholder="{{ __('Task Name') }}" required autofocus />
                     </div>
                 </div>
 
@@ -187,7 +187,6 @@ function toggleModal(event) {
                 @foreach(session('tmp_files') as $name => $path)
                     <form class="w-full" name="deleteform" method="POST" action="{{ route('tasks.destroyTmpPicture', ['project' => $project->id]) }}">
                         @csrf
-                        @method('DELETE')
                         <div class="h-60">
                             <img src="/storage/tmp/{{$path}}" alt="{{$path}}" class="w-full h-full object-contain">
                         </div>
@@ -247,7 +246,6 @@ function toggleModal(event) {
         @csrf
         <!-- ドラッグ&ドロップエリア -->
         <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
-            {{--@TODO 英語化 --}}
             <p>{{ __('Please drag and drop a file or paste an image from the clipboard or') }}
                 <label for="file" class="inline-block p-3 border rounded bg-gray-300">{{ __('File Select') }}</label>
                 <input type="file" name="file" id="file" class="hidden">
