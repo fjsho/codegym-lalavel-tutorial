@@ -17,7 +17,7 @@ class CreateTaskPicturesTable extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained('tasks');
             $table->string('file_path');
-            $table->foreignId('created_user_id')->constrained('tasks');
+            $table->foreignId('created_user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });
