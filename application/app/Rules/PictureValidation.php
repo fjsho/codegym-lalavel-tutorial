@@ -27,7 +27,7 @@ class PictureValidation implements Rule
     {
         $size_mb = $value->getSize() / 1024 / 1024;
         
-        return $size_mb <= 10 && in_array($value->getMimeType(),['image/jpg', 'image/jpeg', 'image/png', 'image/gif']);
+        return $size_mb < 10.05 && in_array($value->getMimeType(),['image/jpg', 'image/jpeg', 'image/png', 'image/gif']);
     }
 
     /**
