@@ -58,7 +58,7 @@ class TaskCreateTest extends TestCase
         $response = $this->actingAs($user)->post(route('tasks.index', ['project' => $project->id]), [
             'name' => $this->faker->words(1, true),
             'task_kind_id' => optional(TaskKind::inRandomOrder()->first())->id,
-            'detail' => $this->faker->realText(random_int(10, 1000)),
+            'task_detail' => $this->faker->realText(random_int(10, 1000)),
             'task_status_id' => optional(TaskStatus::inRandomOrder()->first())->id,
             'updated_user_id' => optional(User::inRandomOrder()->first())->id,
             'assigner_id' => optional(User::inRandomOrder()->first())->id,
@@ -157,7 +157,7 @@ class TaskCreateTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('tasks.index', ['project' => $project->id]), [
             'name' => $this->faker->words(1, true),
-            'detail' => $this->faker->realText(65536),
+            'task_detail' => $this->faker->realText(65536),
             'task_kind_id' => optional(TaskKind::inRandomOrder()->first())->id,
             'task_status_id' => optional(TaskStatus::inRandomOrder()->first())->id,
         ]);
