@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class cleanup_tmp_dir extends Command
+class CleanupTmpDir extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:cleanup_tmp_dir';
+    protected $signature = 'command:cleanup-tmp-dir';
 
     /**
      * The console command description.
