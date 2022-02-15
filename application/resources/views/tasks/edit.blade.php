@@ -1,87 +1,87 @@
 @section('script')
 <script>
-// モーダルウィンドウに係る処理
+    // モーダルウィンドウに係る処理
     function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
 
-        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        // イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
         const dataModalSelect = event.type === 'click' ?
-            //クリック：ボタンのdata-modal-select属性の値を取得
+            // クリック：ボタンのdata-modal-select属性の値を取得
             event.currentTarget.getAttribute('data-modal-select') :
-            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
+            // クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
             document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
 
-        //各モーダルに対して判定を行う
+        // 各モーダルに対して判定を行う
         for(let i = 0; i < modal.length; i++){
-            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
+            // modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
             if(modal[i].getAttribute('data-modal') === dataModalSelect){
-                //メイン処理
-                //modalウィンドウの表示・非表示を切り替える
+                // メイン処理
+                // modalウィンドウの表示・非表示を切り替える
                 modal[i].classList.toggle('opacity-0');
-                //modalウィンドウのマウスイベントの有効・無効を切り替える
+                // modalウィンドウのマウスイベントの有効・無効を切り替える
                 modal[i].classList.toggle('pointer-events-none');
-                //modal-activeクラスのオンオフを切り替える
+                // modal-activeクラスのオンオフを切り替える
                 body.classList.toggle('modal-active');
             }
         }
     };
 
-    //modalウィンドウ表示時の背景
+    // modalウィンドウ表示時の背景
     const overlay = document.querySelectorAll('.modal-overlay');
-    //背景をクリックするとモーダルが見えなくなる
+    // 背景をクリックするとモーダルが見えなくなる
     for (var i = 0; i < overlay.length; i++) {
         overlay[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
+    // モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
     var closeModal = document.querySelectorAll('.modal-close');
-    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
+    // それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
     for (var i = 0; i < closeModal.length; i++) {
         closeModal[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを表示するボタン。複数あるためAllで取得
+    // モーダルを表示するボタン。複数あるためAllで取得
     var openModal = document.querySelectorAll('.modal-open');
-    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
+    // それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
     for (var i = 0; i < openModal.length; i++) {
         openModal[i].addEventListener('click', function(event) {
-            //クリックイベントをキャンセル（削除処理をキャンセルしている）
+            // クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
-            //モーダルウィンドウを表示
+            // モーダルウィンドウを表示
             toggleModal(event);
         })
     }
 
-    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
-    //何かしらキーを押したら発火
+    // Escボタンを押した時の処理（モーダルウィンドウを非表示）
+    // 何かしらキーを押したら発火
     document.onkeydown = function(evt) {
-        //もしイベントが空だったらwindow.eventを入れる
+        // もしイベントが空だったらwindow.eventを入れる
         evt = evt || window.event;
         var isEscape = false;
-        //Escキーが押された場合にisEscape変数をtrueにする処理
+        // Escキーが押された場合にisEscape変数をtrueにする処理
         if ('key' in evt) {
-            //もしevt配列の"key"キーがtrueなら
-            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
+            // もしevt配列の"key"キーがtrueなら
+            // "key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
             isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
         } else {
-            //"key"キーがfalseだったら
-            //"keyCode"キーに27を代入
+            // "key"キーがfalseだったら
+            // "keyCode"キーに27を代入
             isEscape = (evt.keyCode === 27);
         }
-        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
+        // isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
             toggleModal(evt);
         }
     };
 
 
-//ファイルアップロードに関する処理の記述
+// ファイルアップロードに関する処理の記述
     // ドラッグ&ドロップエリアの取得
     let fileArea = document.getElementById('dropArea');
     // input[type=file]の取得
     let fileInput = document.getElementById('file');
-    //dragoverイベントに対する処理
+    // dragoverイベントに対する処理
     function toggleDragOver(event){
         event.preventDefault();
         fileArea.classList.toggle('dragover');
@@ -93,7 +93,7 @@
     // ドラッグアウト時の処理
     fileArea.addEventListener('dragleave', toggleDragOver);
 
-    // // ドロップ時の処理
+    // ドロップ時の処理
     fileArea.addEventListener('drop', function(event){
         toggleDragOver(event);
 

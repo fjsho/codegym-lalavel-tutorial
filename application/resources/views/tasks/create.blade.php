@@ -5,13 +5,13 @@ function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
 
-        //Escキーでモーダルを閉じる処理に対応するためイベントに応じて格納内容を分岐させた
-        //→キーダウンイベントではcurrentTarget.getAttribute()が使えなかったため 
+        // Escキーでモーダルを閉じる処理に対応するためイベントに応じて格納内容を分岐させた
+        // →キーダウンイベントではcurrentTarget.getAttribute()が使えなかったため 
         const dataModalSelect = event.type === 'click' ?
             event.currentTarget.getAttribute('data-modal-select') :
             document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
 
-        //メイン処理
+        // メイン処理
         for(let i = 0; i < modal.length; i++){
             if(modal[i].getAttribute('data-modal') === dataModalSelect){
                 modal[i].classList.toggle('opacity-0');
@@ -21,7 +21,7 @@ function toggleModal(event) {
         }
     };
 
-    //以下イベントの発火条件設定
+    // 以下イベントの発火条件設定
     const overlay = document.querySelectorAll('.modal-overlay');
     for (let i = 0; i < overlay.length; i++) {
         overlay[i].addEventListener('click', toggleModal);
@@ -53,7 +53,7 @@ function toggleModal(event) {
         }
     };
 
-//ドラッグ＆ドロップ対応ファイルアップロード
+    // ドラッグ＆ドロップ対応ファイルアップロード
     const fileArea = document.getElementById('dropArea');
     let fileInput = document.getElementById('file');
 
@@ -65,7 +65,7 @@ function toggleModal(event) {
     fileArea.addEventListener('dragover', toggleDragOver);
     fileArea.addEventListener('dragleave', toggleDragOver);
 
-    //ドロップでファイルを選択した場合
+    // ドロップでファイルを選択した場合
     fileArea.addEventListener('drop', function(event){
         toggleDragOver(event);
         const files = event.dataTransfer.files;
