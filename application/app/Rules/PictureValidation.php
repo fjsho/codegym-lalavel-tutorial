@@ -25,9 +25,10 @@ class PictureValidation implements Rule
      */
     public function passes($attribute, $value)
     {
-        $size_mb = $value->getSize() / 1024 / 1024;
+        $file_size_mb = $value->getSize() / 1024 / 1024;
+        $max_file_size_mb = 10.05; // finder等においては小数点第二位の値で四捨五入されるので、10.05MBまでは"10.0MB"と表示される。そのためユーザーの利便性を考慮してこの値に設定している。
         
-        return $size_mb < 10.05 && in_array($value->getMimeType(),['image/jpg', 'image/jpeg', 'image/png', 'image/gif']);
+        return $file_size_mb < $max_file_size_mb && in_array($value->getMimeType(),['image/jpg', 'image/jpeg', 'image/png', 'image/gif']);
     }
 
     /**
