@@ -87,7 +87,7 @@ class TaskController extends Controller
         $assigners = User::all();
 
         // 遷移元がtasks.create以外ならtmp_filesのセッションを破棄する処理
-        //（投稿画像の一時保存及び破棄時、store失敗時、更新ボタン押下時に一時保存画像を残すことを想定した）
+        // （投稿画像の一時保存及び破棄時、store失敗時、更新ボタン押下時に一時保存画像を残すことを想定した）
         $referer_url = $request->header('referer');
         $tasks_create_url = route('tasks.create', ['project' => $project->id]); 
         if ($referer_url !== $tasks_create_url) {
@@ -126,13 +126,13 @@ class TaskController extends Controller
             'created_user_id' => $created_user_id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
-            //@CHECK：このif文はファンクションにして外に出した方がいいだろうか？
+            // @CHECK：このif文はファンクションにして外に出した方がいいだろうか？
             if($request->session()->has('tmp_files')) {
                 $tmp_file_names = array_keys(session('tmp_files'));
                 foreach($tmp_file_names as $tmp_file_name){
-                    //tmpディレクトリの対象画像をpublcディレクトリに移動させる
+                    // tmpディレクトリの対象画像をpublcディレクトリに移動させる
                     $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
-                    //対象画像の情報をtask_picturesテーブルに保存する
+                    // 対象画像の情報をtask_picturesテーブルに保存する
                     $result[] = TaskPicture::storePicture($task->id, $tmp_file_path, $created_user_id);
                 }
                 if(in_array('error', $result, true)){
