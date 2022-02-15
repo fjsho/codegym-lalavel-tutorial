@@ -23,8 +23,9 @@ class TaskPictureFactory extends Factory
      */
     public function definition()
     {
-        $picture = $this->faker->image('./storage/app/public', 300, 300, 'city');
-        $file_path = str_replace('./storage/app/public/', '', $picture);
+        $storage_dir_path = './storage/app/public';
+        $picture = $this->faker->image($storage_dir_path, 300, 300, 'city');
+        $file_path = str_replace($storage_dir_path, '', $picture);
 
         return [
             'task_id' => optional(Task::inRandomOrder()->first())->id,
