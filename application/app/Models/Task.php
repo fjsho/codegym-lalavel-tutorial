@@ -137,4 +137,29 @@ class Task extends Model
         return $this->hasMany(Taskcomment::class, 'task_id');
     }
 
+    public static function moveAndStorePicture($session, $task, $created_user_id)
+    {
+        // １セッションがtmpfileを持つか確認
+        // ２持っていなかったら何もしない
+        // ３持っていたらtmpfileのファイル名を取得
+        // 以下４−７のループ開始
+        // ４tmpディレクトリからpublicディレクトリに移動する→メソッド化済み
+        // ５移動後のパスを取得
+        // ６画像情報を登録→メソッド化済み
+        // ７登録した結果を取得
+        // ループ終了
+        // ８取得した登録結果にエラーがあればエラーメッセージを取得
+        if($session->has('tmp_files')) {
+            $tmp_file_names = array_keys(session('tmp_files'));
+            foreach($tmp_file_names as $tmp_file_name){
+                $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
+                $result[] = TaskPicture::storePicture($task->id, $tmp_file_path, $created_user_id);
+            }
+            // if(in_array('error', $result, true)){
+            //     $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
+            // } 
+        }
+        return $result;
+    }
+
 }

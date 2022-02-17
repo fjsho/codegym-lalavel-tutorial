@@ -126,18 +126,10 @@ class TaskController extends Controller
             'created_user_id' => $created_user_id,
         ])) {
             $flash = ['success' => __('Task created successfully.')];
-            // @CHECK：このif文はファンクションにして外に出した方がいいだろうか？
-            if($request->session()->has('tmp_files')) {
-                $tmp_file_names = array_keys(session('tmp_files'));
-                foreach($tmp_file_names as $tmp_file_name){
-                    // tmpディレクトリの対象画像をpublcディレクトリに移動させる
-                    $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
-                    // 対象画像の情報をtask_picturesテーブルに保存する
-                    $result[] = TaskPicture::storePicture($task->id, $tmp_file_path, $created_user_id);
-                }
-                if(in_array('error', $result, true)){
-                    $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
-                } 
+
+            $result = Task::moveAndStorePicture($request->session(), $task, $created_user_id);
+            if(in_array('error', $result, true)){
+                $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
             }
         } else {
             $flash = ['error' => __('Failed to create the task.')];
