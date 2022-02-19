@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Exception;
+use League\Flysystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Support\Facades\Storage;
 
 class Task extends Model
 {
@@ -137,29 +140,69 @@ class Task extends Model
         return $this->hasMany(Taskcomment::class, 'task_id');
     }
 
-    public static function moveAndStorePicture($session, $task, $created_user_id)
+    /**
+     * 課題登録と同時に画像保存を行うメソッド
+     * 成功時：登録に成功したtaskレコードのインスタンスを返す
+     * 失敗時：エラーを投げる
+     */
+    public static function createWithPicture(array $attributes = [])
     {
-        // １セッションがtmpfileを持つか確認
-        // ２持っていなかったら何もしない
-        // ３持っていたらtmpfileのファイル名を取得
-        // 以下４−７のループ開始
-        // ４tmpディレクトリからpublicディレクトリに移動する→メソッド化済み
-        // ５移動後のパスを取得
-        // ６画像情報を登録→メソッド化済み
-        // ７登録した結果を取得
-        // ループ終了
-        // ８取得した登録結果にエラーがあればエラーメッセージを取得
-        if($session->has('tmp_files')) {
-            $tmp_file_names = array_keys(session('tmp_files'));
-            foreach($tmp_file_names as $tmp_file_name){
-                $tmp_file_path = TaskPicture::movePictureToPublicFromTmp($tmp_file_name);
-                $result[] = TaskPicture::storePicture($task->id, $tmp_file_path, $created_user_id);
-            }
-            // if(in_array('error', $result, true)){
-            //     $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
-            // } 
+        // 課題登録処理
+        if(!$task = Task::create([
+            'project_id' => $attributes['project_id'],
+            'task_kind_id' => $attributes['task_kind_id'],
+            'name' => $attributes['name'],
+            'task_detail' => $attributes['task_detail'],
+            'task_status_id' => $attributes['task_status_id'],
+            'assigner_id' => $attributes['assigner_id'],
+            'task_category_id' => $attributes['task_category_id'],
+            'due_date' => $attributes['due_date'],
+            'created_user_id' => $attributes['created_user_id'],
+        ])){
+            throw new Exception(__('Failed to create the task.'));
         }
-        return $result;
+
+        if(!is_null($attributes['tmp_files'])){
+            //存在確認処理
+            if(Task::tmpFileExists($attributes['tmp_files'])){
+                //移動処理
+                $moved_files_path = Task::moveTmpFiles($attributes['tmp_files']);
+                //画像登録処理
+                TaskPicture::storePictures($task->id, $moved_files_path, $task->created_user_id);
+            }
+        }
+        return $task;
     }
 
+    /**
+     * 一時ファイルのパス、またはパスを格納した配列を受け取り、それぞれ存在するか確認する。
+     * 全ての画像が存在する場合：tureを返す
+     * １枚でも存在しない画像がある場合：例外を投げる
+     */
+    public static function tmpFileExists(string|array $file_list){
+        foreach($file_list as $file){
+            if(!Storage::exists('public/tmp/'.$file)){
+                throw new FileNotFoundException(__('File not found.'));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 一時ファイルの名前、または名前を格納した配列を受け取り、それぞれを公開ディレクトリに移動させる
+     * 成功時：移動先のファイルパスを文字列または配列で返す
+     * 失敗時：エラーを投げる
+     */
+    public static function moveTmpFiles(string|array $file_list){
+        $from_dir_path = 'public/tmp/';
+        $to_dir_path = 'public/';
+        foreach ($file_list as $file_name) {
+            if(Storage::move($from_dir_path.$file_name, $to_dir_path.$file_name)){
+                $file_path_list[] = $file_name;
+            }else{
+                throw new Exception(__('Failed to move the file.'));
+            };
+        }
+        return $file_path_list;
+    }
 }

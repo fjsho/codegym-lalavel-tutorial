@@ -112,27 +112,24 @@ class TaskController extends Controller
     public function store(TaskStoreRequest $request, Project $project)
     {
         $validated = $request->validated();
-        $created_user_id = $request->user()->id;
 
-        if ($task = Task::create([
-            'project_id' => $project->id,
-            'task_kind_id' => $validated['task_kind_id'],
-            'name' => $validated['name'],
-            'task_detail' => $validated['task_detail'],
-            'task_status_id' => $validated['task_status_id'],
-            'assigner_id' => $validated['assigner_id'],
-            'task_category_id' => $validated['task_category_id'],
-            'due_date' => $validated['due_date'],
-            'created_user_id' => $created_user_id,
-        ])) {
+        try {
+            Task::createWithPicture([
+                'project_id' => $project->id,
+                'task_kind_id' => $validated['task_kind_id'],
+                'name' => $validated['name'],
+                'task_detail' => $validated['task_detail'],
+                'task_status_id' => $validated['task_status_id'],
+                'assigner_id' => $validated['assigner_id'],
+                'task_category_id' => $validated['task_category_id'],
+                'due_date' => $validated['due_date'],
+                'created_user_id' => $request->user()->id,
+                'tmp_files' => $request->session()->get('tmp_files', null),
+            ]);
             $flash = ['success' => __('Task created successfully.')];
-
-            $result = Task::moveAndStorePicture($request->session(), $task, $created_user_id);
-            if(in_array('error', $result, true)){
-                $flash = array_merge($flash,array('error' => __('Failed to upload the picture.')));
-            }
-        } else {
-            $flash = ['error' => __('Failed to create the task.')];
+        } catch (\Throwable $th) {
+            report($th);
+            $flash = ['error' => $th->getMessage()];
         }
 
         return redirect()->route('tasks.index', ['project' => $project->id])
