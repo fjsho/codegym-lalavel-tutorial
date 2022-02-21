@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class TaskPicture extends Model
 {
     use HasFactory;
@@ -49,23 +50,23 @@ class TaskPicture extends Model
     /**
      * 投稿された画像の情報をテーブルに登録する
      * 成功時：trueを返す
-     * 失敗時：エラーを投げる
+     * 失敗時：例外を投げる
      */
     public static function storePictures($task_id, $file_path_list, $created_user_id)
     {
         $count_stored_pictures = TaskPicture::where('task_id', '=', $task_id)->count();
         $to_store_pictures = count($file_path_list);
-        if($count_stored_pictures + $to_store_pictures > 5){
+        if ($count_stored_pictures + $to_store_pictures > 5) {
             throw new Exception(__('Please limit the number of attached picture to 5 or less.'));
         } else {
-            foreach($file_path_list as $file_path){
+            foreach ($file_path_list as $file_path) {
                 $records[] = [
                     'task_id' => $task_id,
                     'file_path' => $file_path,
                     'created_user_id' => $created_user_id,
                 ];
             }
-            if(!$result = TaskPicture::insert($records)){
+            if (!$result = TaskPicture::insert($records)) {
                 throw new Exception(__('Failed to upload the picture.'));
             }
         }

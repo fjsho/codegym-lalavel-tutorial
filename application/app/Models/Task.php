@@ -148,7 +148,7 @@ class Task extends Model
     public static function createWithPicture(array $attributes = [])
     {
         // 課題登録処理
-        if(!$task = Task::create([
+        if (!$task = Task::create([
             'project_id' => $attributes['project_id'],
             'task_kind_id' => $attributes['task_kind_id'],
             'name' => $attributes['name'],
@@ -158,13 +158,13 @@ class Task extends Model
             'task_category_id' => $attributes['task_category_id'],
             'due_date' => $attributes['due_date'],
             'created_user_id' => $attributes['created_user_id'],
-        ])){
+        ])) {
             throw new Exception(__('Failed to create the task.'));
         }
 
-        if(!is_null($attributes['tmp_files'])){
+        if (!is_null($attributes['tmp_files'])) {
             //存在確認処理
-            if(Task::tmpFileExists($attributes['tmp_files'])){
+            if (Task::tmpFileExists($attributes['tmp_files'])) {
                 //移動処理
                 $moved_files_path = Task::moveTmpFiles($attributes['tmp_files']);
                 //画像登録処理
@@ -179,9 +179,10 @@ class Task extends Model
      * 全ての画像が存在する場合：tureを返す
      * １枚でも存在しない画像がある場合：例外を投げる
      */
-    public static function tmpFileExists(string|array $file_list){
-        foreach($file_list as $file){
-            if(!Storage::exists('public/tmp/'.$file)){
+    public static function tmpFileExists(string|array $file_list)
+    {
+        foreach ($file_list as $file) {
+            if (!Storage::exists('public/tmp/' . $file)) {
                 throw new FileNotFoundException(__('File not found.'));
             }
         }
@@ -190,16 +191,17 @@ class Task extends Model
 
     /**
      * 一時ファイルの名前、または名前を格納した配列を受け取り、それぞれを公開ディレクトリに移動させる
-     * 成功時：移動先のファイルパスを文字列または配列で返す
+     * 成功時：移動先のファイルパスを配列で返す
      * 失敗時：エラーを投げる
      */
-    public static function moveTmpFiles(string|array $file_list){
+    public static function moveTmpFiles(string|array $file_list)
+    {
         $from_dir_path = 'public/tmp/';
         $to_dir_path = 'public/';
         foreach ($file_list as $file_name) {
-            if(Storage::move($from_dir_path.$file_name, $to_dir_path.$file_name)){
+            if (Storage::move($from_dir_path . $file_name, $to_dir_path . $file_name)) {
                 $file_path_list[] = $file_name;
-            }else{
+            } else {
                 throw new Exception(__('Failed to move the file.'));
             };
         }
