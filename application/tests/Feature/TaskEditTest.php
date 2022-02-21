@@ -266,7 +266,7 @@ class TaskEditTest extends TestCase
         $params = [
             'task_kind_id' => TaskKind::inRandomOrder()->first()->id,
             'name' => $this->faker->words(rand(1, 5), true),
-            'detail' => $this->faker->regexify('[A-Z0-9_-]{65536}'),
+            'task_detail' => $this->faker->regexify('[A-Z0-9_-]{65536}'),
             'task_status_id' => TaskStatus::inRandomOrder()->first()->id,
         ];
         $response = $this->actingAs($user)
