@@ -39,9 +39,15 @@ class TaskPictureController extends Controller
      */
     public function store(TaskPictureStoreRequest $request, Project $project, Task $task)
     {
-        $file_path = basename($request->file('file')->store('public'));
-        $result = TaskPicture::storePicture($task->id, $file_path, $request->user()->id);
-        $flash = $result;
+        $file_path_list[] = basename($request->file('file')->store('public'));
+
+        try {
+            TaskPicture::storePictures($task->id, $file_path_list, $request->user()->id);
+            $flash = ['success' => __('Picture uploaded successfully.')];
+        } catch (\Throwable $th) {
+            report($th);
+            $flash = ['error' => $th->getMessage()];
+        }
 
         return redirect()
             ->route('tasks.edit', ['project' => $project->id, 'task' => $task->id])
