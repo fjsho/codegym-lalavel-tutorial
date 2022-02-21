@@ -66,7 +66,7 @@ class TaskPicture extends Model
                     'created_user_id' => $created_user_id,
                 ];
             }
-            if (!$result = TaskPicture::insert($records)) {
+            if (!$result = TaskPicture::upsert($records,['id'])) {
                 throw new Exception(__('Failed to upload the picture.'));
             }
         }
