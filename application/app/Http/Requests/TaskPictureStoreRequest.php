@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PictureValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskCommentStoreRequest extends FormRequest
+class TaskPictureStoreRequest extends FormRequest
 {
     /**
      * @overRide
@@ -15,9 +16,7 @@ class TaskCommentStoreRequest extends FormRequest
     public function validationData()
     {
         $all = $this->all();
-        if (isset($all['comment'])) {
-            $all['comment'] = preg_replace("/\r\n/", "\n", $all['comment']);
-        }
+
         return $all;
     }
 
@@ -29,7 +28,7 @@ class TaskCommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment' => 'required|string|max:1000',
+            'file' => ['required','file',new PictureValidation]
         ];
     }
 }

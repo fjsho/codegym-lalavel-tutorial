@@ -8,6 +8,7 @@ use App\Models\TaskCategory;
 use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\TaskComment;
+use App\Models\TaskPicture;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskStoreRequest;
@@ -78,12 +79,20 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Project $project)
+    public function create(Request $request, Project $project)
     {
         $task_kinds = TaskKind::all();
         $task_statuses = TaskStatus::all();
         $task_categories = TaskCategory::all();
         $assigners = User::all();
+
+        // 遷移元がtasks.create以外ならtmp_filesのセッションを破棄する処理
+        // （投稿画像の一時保存及び破棄時、store失敗時、更新ボタン押下時に一時保存画像を残すことを想定した）
+        $referer_url = $request->header('referer');
+        $tasks_create_url = route('tasks.create', ['project' => $project->id]);
+        if ($referer_url !== $tasks_create_url) {
+            $request->session()->forget('tmp_files');
+        }
 
         return view('tasks.create', [
             'project' => $project,
@@ -104,20 +113,23 @@ class TaskController extends Controller
     {
         $validated = $request->validated();
 
-        if (Task::create([
-            'project_id' => $project->id,
-            'task_kind_id' => $validated['task_kind_id'],
-            'name' => $validated['name'],
-            'task_detail' => $validated['task_detail'],
-            'task_status_id' => $validated['task_status_id'],
-            'assigner_id' => $validated['assigner_id'],
-            'task_category_id' => $validated['task_category_id'],
-            'due_date' => $validated['due_date'],
-            'created_user_id' => $request->user()->id,
-        ])) {
+        try {
+            Task::createWithPicture([
+                'project_id' => $project->id,
+                'task_kind_id' => $validated['task_kind_id'],
+                'name' => $validated['name'],
+                'task_detail' => $validated['task_detail'],
+                'task_status_id' => $validated['task_status_id'],
+                'assigner_id' => $validated['assigner_id'],
+                'task_category_id' => $validated['task_category_id'],
+                'due_date' => $validated['due_date'],
+                'created_user_id' => $request->user()->id,
+                'tmp_files' => $request->session()->get('tmp_files', null),
+            ]);
             $flash = ['success' => __('Task created successfully.')];
-        } else {
-            $flash = ['error' => __('Failed to create the task.')];
+        } catch (\Throwable $th) {
+            report($th);
+            $flash = ['error' => $th->getMessage()];
         }
 
         return redirect()->route('tasks.index', ['project' => $project->id])
@@ -150,6 +162,8 @@ class TaskController extends Controller
         $task_comments = TaskComment::where('task_id', '=', $task->id)
             ->oldest()
             ->get();
+        $task_pictures = TaskPicture::where('task_id', '=', $task->id)
+            ->get();
 
         return view('tasks.edit', [
             'project' => $project,
@@ -159,6 +173,7 @@ class TaskController extends Controller
             'assigners' => $assigners,
             'task' => $task,
             'task_comments' => $task_comments,
+            'task_pictures' => $task_pictures,
         ]);
     }
 

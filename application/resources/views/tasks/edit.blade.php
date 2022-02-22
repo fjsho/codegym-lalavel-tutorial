@@ -1,78 +1,127 @@
 @section('script')
 <script>
+    // モーダルウィンドウに係る処理
     function toggleModal(event) {
         const body = document.querySelector('body');
         const modal = document.querySelectorAll('.modal');
 
-        //イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
+        // イベントのタイプがキーダウンだった場合とクリックだった場合で処理を分岐させる
         const dataModalSelect = event.type === 'click' ?
-            //クリック：ボタンのdata-modal-select属性の値を取得
+            // クリック：ボタンのdata-modal-select属性の値を取得
             event.currentTarget.getAttribute('data-modal-select') :
-            //クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
+            // クリック以外（keydownを想定）：展開中のモーダルのdata-modal属性の値を取得
             document.querySelector('.modal:not(.opacity-0)' ).getAttribute('data-modal');
 
-        //各モーダルに対して判定を行う
+        // 各モーダルに対して判定を行う
         for(let i = 0; i < modal.length; i++){
-            //modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
+            // modalのdata-modal属性とボタンのdata-modal属性が一致したらメイン処理を実行
             if(modal[i].getAttribute('data-modal') === dataModalSelect){
-                //メイン処理
-                //modalウィンドウの表示・非表示を切り替える
+                // メイン処理
+                // modalウィンドウの表示・非表示を切り替える
                 modal[i].classList.toggle('opacity-0');
-                //modalウィンドウのマウスイベントの有効・無効を切り替える
+                // modalウィンドウのマウスイベントの有効・無効を切り替える
                 modal[i].classList.toggle('pointer-events-none');
-                //modal-activeクラスのオンオフを切り替える
+                // modal-activeクラスのオンオフを切り替える
                 body.classList.toggle('modal-active');
             }
         }
     };
 
-    //modalウィンドウ表示時の背景
+    // modalウィンドウ表示時の背景
     const overlay = document.querySelectorAll('.modal-overlay');
-    //背景をクリックするとモーダルが見えなくなる
+    // 背景をクリックするとモーダルが見えなくなる
     for (var i = 0; i < overlay.length; i++) {
         overlay[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
+    // モーダルを閉じる（非表示にする）ボタン。複数あるためAllで取得。
     var closeModal = document.querySelectorAll('.modal-close');
-    //それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
+    // それぞれの閉じるボタンに処理を付加するための記述。各閉じるボタンにクリックイベントを付加している。
     for (var i = 0; i < closeModal.length; i++) {
         closeModal[i].addEventListener('click', toggleModal);
     }
 
-    //モーダルを表示するボタン。複数あるためAllで取得
+    // モーダルを表示するボタン。複数あるためAllで取得
     var openModal = document.querySelectorAll('.modal-open');
-    //それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
+    // それぞれの表示ボタンに処理を付加するための記述。各表示ボタンにクリックイベントを付加している。
     for (var i = 0; i < openModal.length; i++) {
         openModal[i].addEventListener('click', function(event) {
-            //クリックイベントをキャンセル（削除処理をキャンセルしている）
+            // クリックイベントをキャンセル（削除処理をキャンセルしている）
             event.preventDefault();
-            //モーダルウィンドウを表示
+            // モーダルウィンドウを表示
             toggleModal(event);
         })
     }
 
-    //Escボタンを押した時の処理（モーダルウィンドウを非表示）
-    //何かしらキーを押したら発火
+    // Escボタンを押した時の処理（モーダルウィンドウを非表示）
+    // 何かしらキーを押したら発火
     document.onkeydown = function(evt) {
-        //もしイベントが空だったらwindow.eventを入れる
+        // もしイベントが空だったらwindow.eventを入れる
         evt = evt || window.event;
         var isEscape = false;
-        //Escキーが押された場合にisEscape変数をtrueにする処理
+        // Escキーが押された場合にisEscape変数をtrueにする処理
         if ('key' in evt) {
-            //もしevt配列の"key"キーがtrueなら
-            //"key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
+            // もしevt配列の"key"キーがtrueなら
+            // "key"キーが"Escape"か"Esc"かどうかを確認し、どっちかならisEscape変数にその値を代入
             isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
         } else {
-            //"key"キーがfalseだったら
-            //"keyCode"キーに27を代入
+            // "key"キーがfalseだったら
+            // "keyCode"キーに27を代入
             isEscape = (evt.keyCode === 27);
         }
-        //isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
+        // isEscapeがtrue かつ bodyタグのクラスに'modal-active'があったらtoggleModalを呼び出す。
         if (isEscape && document.body.classList.contains('modal-active')) {
             toggleModal(evt);
         }
     };
+
+
+// ファイルアップロードに関する処理の記述
+    // ドラッグ&ドロップエリアの取得
+    let fileArea = document.getElementById('dropArea');
+    // input[type=file]の取得
+    let fileInput = document.getElementById('file');
+    // dragoverイベントに対する処理
+    function toggleDragOver(event){
+        event.preventDefault();
+        fileArea.classList.toggle('dragover');
+    };
+
+    // ドラッグオーバー時の処理
+    fileArea.addEventListener('dragover', toggleDragOver);
+
+    // ドラッグアウト時の処理
+    fileArea.addEventListener('dragleave', toggleDragOver);
+
+    // ドロップ時の処理
+    fileArea.addEventListener('drop', function(event){
+        toggleDragOver(event);
+
+        // ドロップしたファイルの取得
+        let files = event.dataTransfer.files;
+
+        // 取得したファイルをinput[type=file]へ
+        fileInput.files = files;
+        
+        if(typeof files[0] !== 'undefined') {
+            // ファイルが正常に受け取れた際の処理
+            document.forms[`uploadform`].submit();
+        } else {
+            // ファイルが受け取れなかった際の処理
+        }
+    });
+
+    // クリックしてファイル選択した際の処理
+    fileInput.addEventListener('change', function(event){
+        const file = event.target.files[0];
+        
+        if(typeof event.target.files[0] !== 'undefined') {
+            // ファイルが正常に受け取れた際の処理
+            document.forms['uploadform'].submit();
+        } else {
+            // ファイルが受け取れなかった際の処理
+        }
+    }, false);
 
 </script>
 @endsection
@@ -210,7 +259,90 @@
             </div>
         </form>
 
-        {{-- 作業ここから --}}
+        {{-- 投稿画像表示欄ここから --}}
+        <div class="mx-auto">
+            <div class="overflow-hidden sm:rounded-lg">
+                <div class="px-6 py-3">
+                    <h4 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ __('Pictures') }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="px-3 pt-3 mx-6 mb-3 rounded-md">
+            <div class="grid grid-cols-2 gap-10 p-3 mb-6 place-items-center">
+                @foreach ($task_pictures as $task_picture)
+                    <form class="w-full" name="deleteform" method="POST" action="{{ route('task_pictures.destroy', ['project' => $project->id, 'task' => $task->id, 'task_picture' => $task_picture]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <div class="h-60">
+                            <img src="/storage/{{$task_picture->file_path}}" alt="{{$task_picture->file_path}}" class="w-full h-full object-contain">
+                        </div>
+                        <!-- Navigation -->
+                        <div class="w-full h-full px-3 py-3">
+                            <div class="flex justify-end">
+                                <x-list-button class="modal-open px-8 bg-gray-100 text-red-400 border-red-400 hover:bg-gray-300 active:bg-gray-600 focus:border-red-900 ring-red-300" data-modal-select="modal-3-{{$loop->iteration}}">
+                                    {{ __('Delete') }}
+                                </x-list-button>
+                            </div>
+                        </div>
+                        <!--Modal-->
+                        <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" data-modal="modal-3-{{$loop->iteration}}">
+                            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" data-modal-select="modal-3-{{$loop->iteration}}"></div>
+            
+                            <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            
+                                <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50" data-modal-select="modal-3-{{$loop->iteration}}">
+                                    <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                    </svg>
+                                    <span class="text-sm">(Esc)</span>
+                                </div>
+            
+                                <div class="modal-content py-4 text-left px-6">
+                                    <div class="flex justify-between items-center pb-3">
+                                        <p class="text-2xl font-bold">{{ __('Are you sure you want to delete this picture?') }}</p>
+                                        <div class="modal-close cursor-pointer z-50" data-modal-select="modal-3-{{$loop->iteration}}">
+                                            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+            
+                                    <p>{{ __('Are you sure you want to delete this picture? Once a picture is deleted, all of its resources and data will be permanently deleted.') }}</p>
+            
+                                    <div class="flex justify-end pt-2">
+                                        <x-link-button class="modal-close m-2" href="#" data-modal-select="modal-3-{{$loop->iteration}}">
+                                            {{ __('Cancel') }}
+                                        </x-link-button>
+                                        <x-button class="m-2 px-10 bg-red-600 text-white hover:bg-red-700 active:bg-red-900 focus:border-red-900 ring-red-300">
+                                            {{ __('Delete') }}
+                                        </x-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                @endforeach
+            </div>
+        </div>
+        {{-- 投稿画像表示欄ここまで --}}
+
+        {{-- 画像投稿機能ここから --}}
+        <form name="uploadform" method="POST" action="{{ route('task_pictures.store', ['project' => $project->id, 'task' => $task]) }}" enctype="multipart/form-data">
+            @csrf
+            <!-- ドラッグ&ドロップエリア -->
+            <div id="dropArea" class="flex flex-col px-3 py-9 mx-6 my-3 border-4 border-dashed rounded-md">
+                {{-- ここ要英語化 --}}
+                <p>{{ __('Please drag and drop a file or paste an image from the clipboard or') }}
+                    <label for="file" class="inline-block p-3 border rounded bg-gray-300">{{ __('File Select') }}</label>
+                    <input type="file" name="file" id="file" class="hidden">
+                </p>        
+            </div>
+        </form>
+        {{-- 画像投稿機能ここまで --}}
+
+        {{-- コメント表示欄ここから --}}
         <div>
             {{-- ラベル --}}
             <div class="mx-auto">
@@ -313,7 +445,7 @@
                 </div>
             </form>
         </div>
-        {{-- 作業ここまで --}}
+        {{-- コメント表示欄ここまで --}}
 
     </div>
 </x-app-layout>

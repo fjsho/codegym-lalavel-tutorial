@@ -58,6 +58,8 @@ class ProjectIndexTest extends TestCase
     public function プロジェクト一覧が表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
         $projects = Project::factory(10)->create([
@@ -72,7 +74,7 @@ class ProjectIndexTest extends TestCase
         $response->assertSee(__('Created At'));
         $response->assertSee(__('Updated At'));
         $response->assertSee(__('Tasks'));
-        $response->assertSee(__('Tasks.create'));
+        $response->assertSee(__('Task Create'));
 
         foreach ($projects as $project) {
             $response->assertSee(">$project->key</a>", false);
@@ -89,6 +91,8 @@ class ProjectIndexTest extends TestCase
     public function キーワードで検索ができる()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
         // 検索して1件だけヒットするように多めにレコードを作成する
@@ -120,6 +124,8 @@ class ProjectIndexTest extends TestCase
     public function プロジェクトが指定の件数を超えるとページネーションが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -141,6 +147,8 @@ class ProjectIndexTest extends TestCase
     public function URLにページのパラメータが含まれている場合指定のページが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -163,6 +171,8 @@ class ProjectIndexTest extends TestCase
     public function URLに存在しないページのパラメータが含まれている場合一覧が表示されない()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -178,7 +188,7 @@ class ProjectIndexTest extends TestCase
         $response->assertDontSee(__('Created At'));
         $response->assertDontSee(__('Updated At'));
         $response->assertDontSee(__('Tasks'));
-        $response->assertDontSee(__('Tasks.create'));
+        $response->assertDontSee(__('Task Create'));
     }
 
     /**
@@ -188,6 +198,8 @@ class ProjectIndexTest extends TestCase
     public function URLにキーワードとページのパラメータが含まれている場合指定のページが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -214,6 +226,8 @@ class ProjectIndexTest extends TestCase
     public function URLにキーワードのパラメータが含まれている場合ページネーションのURLにもキーワードが設定される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 

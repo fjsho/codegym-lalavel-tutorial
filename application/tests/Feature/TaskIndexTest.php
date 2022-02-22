@@ -70,6 +70,8 @@ class TaskIndexTest extends TestCase
     public function 課題一覧が表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -115,6 +117,8 @@ class TaskIndexTest extends TestCase
     public function キーワードで検索ができる()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
         $project = Project::factory()->create([
@@ -156,6 +160,8 @@ class TaskIndexTest extends TestCase
      */
     public function 担当者で検索ができる()
     {
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
         $user = User::factory()->create();
@@ -206,6 +212,8 @@ class TaskIndexTest extends TestCase
     public function 課題が指定の件数を超えるとページネーションが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -231,6 +239,8 @@ class TaskIndexTest extends TestCase
     public function URLにページのパラメータが含まれている場合指定のページが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -258,6 +268,8 @@ class TaskIndexTest extends TestCase
     public function URLに存在しないページのパラメータが含まれている場合一覧が表示されない()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -288,6 +300,8 @@ class TaskIndexTest extends TestCase
     public function URLにキーワードとページのパラメータが含まれている場合指定のページが表示される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -319,6 +333,8 @@ class TaskIndexTest extends TestCase
     public function URLにキーワードのパラメータが含まれている場合ページネーションのURLにもキーワードが設定される()
     {
         $user = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -350,6 +366,8 @@ class TaskIndexTest extends TestCase
     {
         $user = User::factory()->create();
         $assigner = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 
@@ -381,6 +399,8 @@ class TaskIndexTest extends TestCase
     {
         $user = User::factory()->create();
         $assigner = User::factory()->create();
+        DB::table('task_comments')->delete();
+        DB::table('task_pictures')->delete();
         DB::table('tasks')->delete();
         DB::table('projects')->delete();
 

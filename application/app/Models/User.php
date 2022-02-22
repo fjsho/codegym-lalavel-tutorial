@@ -56,4 +56,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Task::class, 'created_user_id');
     }
+
+    /**
+     * ユーザーの画像を取得.
+     */
+    public function pictures()
+    {
+        return $this->hasMany(TaskPicture::class, 'created_user_id');
+    }
 }
