@@ -18,8 +18,14 @@
                 -webkit-text-size-adjust: 100%;
             }
 
-            body {
+            body {64c8c8646400643264640064c800
                 margin: 0;
+                background-image: url({{ asset('css/images/error-background.png') }});
+                background-repeat: no-repeat;
+                background-position: 100% 50%;
+                background-size: contain;
+                background-color:rgba(255, 255, 255, 0.7);
+                background-blend-mode: lighten;
             }
 
             header,
@@ -321,6 +327,10 @@
                 margin: 2rem;
             }
 
+            .mr-12 {
+                margin-right: 3rem;
+            }
+
             .my-3 {
                 margin-top: .75rem;
                 margin-bottom: .75rem;
@@ -377,6 +387,10 @@
 
             .text-grey-darker {
                 color: #606f7b;
+            }
+
+            .text-base {
+                font-size: 1rem;
             }
 
             .text-2xl {
@@ -458,21 +472,28 @@
     </head>
     <body class="antialiased font-sans">
         <div class="md:flex min-h-screen">
-            <div class="w-full md:w-1/2 bg-white flex items-center justify-center">
+            <div class="w-full mr-12 md:w-1/2 bg-transparent flex items-center justify-center">
                 <div class="max-w-sm m-8">
-                    <div class="text-black text-5xl md:text-15xl font-black">
-                        @yield('code', __('Oh no'))
+                    <div class="flex">
+                        <div class="text-black text-5xl md:text-15xl font-black">
+                            @yield('code', __('Oh no'))
+                        </div>
+                        <div class="h-10 w-auto">
+                            <x-application-logo class="block fill-current text-gray-600" />
+                        </div>
                     </div>
 
-                    <div class="w-16 h-1 bg-purple-light my-3 md:my-6"></div>
-
-                    <p class="text-grey-darker text-2xl md:text-3xl font-light mb-8 leading-normal">
+                    <p class="text-grey-darkest text-2xl md:text-3xl font-light mb-4 leading-normal">
+                        @yield('heading')
+                    </p>
+                    <p class="text-grey-darkest text-base md:text-base font-light mb-8 leading-normal">
                         @yield('message')
                     </p>
 
-                    <a href="{{ app('router')->has('home') ? route('home') : url('/') }}">
-                        <button class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-                            {{ __('Go Home') }}
+
+                    <a href="{{ app('router')->has('dashboard') ? route('dashboard') : url('/') }}">
+                        <button class="bg-white text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
+                            {{ __('Back to page :page', ['page' =>__('Dashboard')]) }}
                         </button>
                     </a>
                 </div>
