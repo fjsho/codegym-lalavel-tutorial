@@ -319,8 +319,8 @@
                 font-weight: 900;
             }
 
-            .h-1 {
-                height: .25rem;
+            .h-12 {
+                height: 3rem;
             }
 
             .leading-normal {
@@ -340,8 +340,8 @@
                 margin-bottom: .75rem;
             }
 
-            .mb-8 {
-                margin-bottom: 2rem;
+            .mb-4 {
+                margin-bottom: 1rem;
             }
 
             .max-w-sm {
@@ -482,10 +482,10 @@
                         <div class="text-black text-5xl md:text-15xl font-black">
                             @yield('code', __('Oh no'))
                         </div>
-                        <p class="text-grey-darkest text-2xl md:text-3xl font-light mb-4 leading-normal">
+                        <p class="text-grey-darkest text-2xl md:text-3xl font-light leading-normal">
                             @yield('heading')
                         </p>
-                        <p class="text-grey-darkest text-base md:text-base font-light mb-8 leading-normal">
+                        <p class="h-12 text-grey-darkest text-base md:text-base font-light mb-4 leading-normal">
                             @yield('message')
                         </p>
                     </div>
@@ -495,10 +495,6 @@
                         </button>
                     </a>
                 </div>
-            </div>
-
-            <div class="relative pb-full md:flex md:pb-0 md:min-h-screen w-full md:w-1/2">
-                @yield('image')
             </div>
         </div>
     </body>
