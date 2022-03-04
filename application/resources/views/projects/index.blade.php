@@ -83,7 +83,7 @@
                 <div class="flex justify-start p-2">
                     {{ $projects->appends(request()->query())->links() }}
                 </div>
-                @endif
+            @endif
         </div>
     </form>
 
