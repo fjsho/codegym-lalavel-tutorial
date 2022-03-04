@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskPicture;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 class TaskPictureFactory extends Factory
 {
@@ -23,7 +24,10 @@ class TaskPictureFactory extends Factory
      */
     public function definition()
     {
-        $storage_dir_path = './storage/app/public';
+        $storage_dir_path = Storage::disk('local')->path('public');
+        if(Storage::disk('local')->missing('public')){
+            Storage::makeDirectory('public');
+        }
         $picture = $this->faker->image($storage_dir_path, 300, 300, 'city');
         $file_path = str_replace($storage_dir_path, '', $picture);
 
