@@ -1,3 +1,16 @@
+@section('script')
+<script>
+    const radioElements = document.getElementsByName('project_id');
+    document.addEventListener('DOMContentLoaded', function() {
+        for (const radioElement of radioElements) {
+            radioElement.addEventListener('change', function(){
+                document.forms["filter_search"].submit();
+            });
+        }
+    });
+</script>
+@endsection
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,7 +28,7 @@
     </x-slot>
 
     <div>
-        <form method="GET" action="{{route('dashboard')}}">
+        <form name="filter_search" method="GET" action="{{route('dashboard')}}">
             <!-- Validation Errors -->
             <x-flash-message />
             <x-validation-errors :errors="$errors" />
@@ -48,10 +61,12 @@
                                 </thead>
                                 <tbody class="text-gray-600 text-sm font-light">
                                     @foreach($projects as $project)
-                                    <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer @if($loop->even)bg-gray-50 @endif" onclick="location.href='{{ route('projects.edit', ['project' => $project->id]) }}'">
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer @if($loop->even)bg-gray-50 @endif" onclick="document.getElementById('{{$project->id}}').click()">
                                         <td class="py-3 px-6 text-left">
-                                            <input type="radio" value="{{$project->id}}">
-                                            <a class="underline font-medium text-gray-600 hover:text-gray-900" href="{{ route('projects.edit', ['project' => $project->id]) }}">{{ $project->name }}</a>
+                                            <p>
+                                                <input type="radio" name="project_id" id="{{$project->id}}" value="{{$project->id}}" @if($project->id ==  intval($searched_project_id)) checked @endif/>
+                                                <label for="{{$project->id}}">{{ $project->name }}</label>
+                                            </p>
                                         </td>
                                     </tr>
                                     @endforeach

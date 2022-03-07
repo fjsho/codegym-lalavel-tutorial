@@ -17,12 +17,23 @@ class Dashboard extends Controller
      */
     public function __invoke(Request $request)
     {
-        $projects = Project::all();
         $assigners = User::all();
-
         $assigner_id = $request->input('assigner_id');
 
-        $tasks = Task::select('*');
+        $projects = Project::all();
+        $project_id = $request->input('project_id');
+
+        $tasks = Task::select(
+            'tasks.*',
+            'tasks.id as key,'
+        )
+            ->with('project');
+
+        if ($request->has('project_id') && isset($project_id)) {
+            $tasks->join('projects', 'tasks.project_id', 'projects.id');
+            $tasks->where('project_id', '=', $project_id);
+        }
+
         if ($request->has('assigner_id') && isset($assigner_id)) {
             $tasks->leftJoin('users as search_assigner', 'tasks.assigner_id', 'search_assigner.id');
             $tasks->where('tasks.assigner_id', '=', $assigner_id);
@@ -30,10 +41,11 @@ class Dashboard extends Controller
         $tasks = $tasks->get();
 
         return view('dashboard', [
-            'projects' => $projects,
-            'tasks' => $tasks,
             'assigners' => $assigners,
             'assigner_id' => $assigner_id,
+            'projects' => $projects,
+            'searched_project_id' => $project_id,
+            'tasks' => $tasks,
         ]);
     }
 }
