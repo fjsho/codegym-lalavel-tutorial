@@ -76,8 +76,21 @@
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    {{-- グラフ --}}
-                    <div>グラフ枠</div>
+                    {{-- progress-pie-chart --}}
+                    <div class="mx-6 my-6 w-52 h-52 rounded-full bg-gray-400 relative" data-percent="43">
+                        {{-- ppc-progress --}}
+                        <div class="absolute rounded-full w-52 h-52">
+                            {{-- ppc-progress-fill --}}
+                            <div class="absolute rounded-full w-52 h-52 bg-green-200 rotate-45"></div>
+                        </div>
+                        {{-- ppc-percents --}}
+                        <div class="absolute rounded-full w-5/6 h-5/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-center table">
+                            {{-- ppc-percents-wrapper --}}
+                            <div class="table-cell align-middle">
+                                <span class="block text-5xl font-bold text-green-300">%</span>
+                            </div>
+                        </div>
+                    </div>
                     {{-- タスク --}}
                     <div class="flex flex-col mx-6 mb-6 bg-white rounded h-screen overflow-scroll">
                         @if(0 < $tasks->count())
