@@ -8,6 +8,23 @@
             });
         }
     });
+
+    const ppc = document.getElementById('progress-pie-chart'),
+        ppcProgressFill = document.getElementById('ppc-progress-fill'),
+        ppcPercents = document.getElementById('ppc-percents'),
+        percent = parseInt(ppc.dataset.percent),
+        deg = 360 * percent / 100;
+    if (percent > 50) {
+        ppc.classList.add('gt-50');
+    }
+    ppcProgressFill.classList.add('transform','rotate('+ deg +'deg)');
+    // ppcPercents.textContent = `${percent}%`;
+
+    console.log(ppc);
+    console.log(ppcProgressFill);
+    console.log(ppcPercents);
+    console.log(percent);
+    console.log(deg);
 </script>
 @endsection
 
@@ -76,17 +93,13 @@
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    {{-- progress-pie-chart --}}
-                    <div class="mx-6 my-6 w-52 h-52 rounded-full bg-gray-400 relative" data-percent="43">
-                        {{-- ppc-progress --}}
-                        <div class="absolute rounded-full w-52 h-52">
-                            {{-- ppc-progress-fill --}}
-                            <div class="absolute rounded-full w-52 h-52 bg-green-200 rotate-45"></div>
+                    {{-- @next グラフデザイン続き --}}
+                    <div id="progress-pie-chart" class="relative mx-6 my-6 w-52 h-52 rounded-full bg-gray-400" data-percent="45">
+                        <div id="ppc-progress" class="absolute rounded-full w-52 h-52">
+                            <div id="ppc-progress-fill" class="absolute rounded-full w-52 h-52 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-200 rotate-45 bg-clip-content"></div>
                         </div>
-                        {{-- ppc-percents --}}
-                        <div class="absolute rounded-full w-5/6 h-5/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-center table">
-                            {{-- ppc-percents-wrapper --}}
-                            <div class="table-cell align-middle">
+                        <div id="ppc-percents" class="absolute rounded-full w-5/6 h-5/6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-center table">
+                            <div id="ppc-percents-wrapper" class="table-cell align-middle">
                                 <span class="block text-5xl font-bold text-green-300">%</span>
                             </div>
                         </div>
