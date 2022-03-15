@@ -8,23 +8,6 @@
             });
         }
     });
-
-    const ppc = document.getElementById('progress-pie-chart'),
-        ppcProgressFill = document.getElementById('ppc-progress-fill'),
-        ppcPercents = document.getElementById('ppc-percents'),
-        percent = parseInt(ppc.dataset.percent),
-        deg = 360 * percent / 100;
-    if (percent > 50) {
-        ppc.classList.add('gt-50');
-    }
-    ppcProgressFill.classList.add('transform','rotate('+ deg +'deg)');
-    // ppcPercents.textContent = `${percent}%`;
-
-    console.log(ppc);
-    console.log(ppcProgressFill);
-    console.log(ppcPercents);
-    console.log(percent);
-    console.log(deg);
 </script>
 @endsection
 
@@ -52,21 +35,25 @@
 
             <!-- Navigation -->
             <div class="flex">
-                <div class="flex flex-col">
+                <div class="flex flex-col max-w-full mx-auto px-4 py-6 sm:px-6 lg:px-6">
                     {{-- 担当者 --}}
-                    <div class="flex max-w-full mx-auto px-4 py-6 sm:px-6 lg:px-6">
-                        <div class="md:w-1/3 px-3 mb-6 mr-6">
+                    <div class="flex flex-col pb-6">
+                        <div class="w-full md:w-1/3">
                             <x-label for="assigner_id" :value="__('Assigner')" class="{{ $errors->has('assigner_id') ? 'text-red-600' :'' }}" />
-                            <x-select :options="$assigners" id="assigner_id" class="block mt-1 w-full {{ $errors->has('assigner_id') ? 'border-red-600' :'' }}" type="text" name="assigner_id" :value="$assigner_id" autofocus />
                         </div>
-                        <div class="flex flex-wrap content-center">
-                            <x-button class="px-10">
-                                切り替え
-                            </x-button>
+                        <div class="flex content-center mt-1">
+                            <div class="pl-2">
+                                <x-select :options="$assigners" id="assigner_id" class="block w-full {{ $errors->has('assigner_id') ? 'border-red-600' :'' }}" type="text" name="assigner_id" :value="$assigner_id" autofocus />
+                            </div>
+                            <div class="pl-6 my-auto">
+                                <x-button class="px-10">
+                                    切り替え
+                                </x-button>
+                            </div>
                         </div>
                     </div>
                     {{-- プロジェクト --}}
-                    <div class="flex flex-col mx-6 mb-6 bg-white rounded h-screen overflow-scroll">
+                    <div class="flex flex-col pb-6 bg-white rounded h-screen overflow-scroll">
                         @if(0 < $projects->count())
                             <table class="min-w-max w-full table-auto">
                                 <thead>
@@ -92,20 +79,14 @@
                         @endif
                     </div>
                 </div>
-                <div class="flex flex-col">
-                    {{-- @next グラフデザイン続き --}}
-                    <div id="progress-pie-chart" class="relative mx-6 my-6 w-52 h-52 rounded-full bg-gray-400" data-percent="45">
-                        <div id="ppc-progress" class="absolute rounded-full w-52 h-52">
-                            <div id="ppc-progress-fill" class="absolute rounded-full w-52 h-52 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-200 rotate-45 bg-clip-content"></div>
-                        </div>
-                        <div id="ppc-percents" class="absolute rounded-full w-5/6 h-5/6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-center table">
-                            <div id="ppc-percents-wrapper" class="table-cell align-middle">
-                                <span class="block text-5xl font-bold text-green-300">%</span>
-                            </div>
-                        </div>
+                <div class="flex flex-col px-6">
+                    {{-- 進捗率表示 --}}
+                    <div class="mx-auto py-6">
+                        <span class="text-5xl font-bold text-green-300">進捗率</span>
+                        <span id="progress" class="text-5xl font-bold text-green-300">%</span>
                     </div>
                     {{-- タスク --}}
-                    <div class="flex flex-col mx-6 mb-6 bg-white rounded h-screen overflow-scroll">
+                    <div class="flex flex-col pb-6 bg-white rounded h-screen overflow-scroll">
                         @if(0 < $tasks->count())
                             <table class="min-w-max w-full table-auto">
                                 <thead>
