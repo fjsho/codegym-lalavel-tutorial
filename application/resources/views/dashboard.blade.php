@@ -80,6 +80,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col px-6">
+                    {{-- @next 進捗率を表示するJS処理の記述 --}}
                     {{-- 進捗率表示 --}}
                     <div class="mx-auto py-6">
                         <span class="text-5xl font-bold text-green-300">進捗率</span>
@@ -103,6 +104,9 @@
                                         <th class="py-3 px-6 text-center">
                                             @sortablelink('task_category', __('Task Category'))
                                         </th>
+                                        <th class="py-3 px-6 text-center">
+                                            @sortablelink('task_status', __('Task Status'))
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-gray-600 text-sm font-light">
@@ -121,6 +125,9 @@
                                         </td>
                                         <td class="py-3 px-6 text-left whitespace-nowrap">
                                             <span>{{ $task->task_category->name }}</span>
+                                        </td>
+                                        <td class="py-3 px-6 text-left whitespace-nowrap">
+                                            <span>{{ $task->task_status->name }}</span>
                                         </td>
                                     </tr>
                                     @endforeach
