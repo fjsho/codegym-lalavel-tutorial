@@ -8,6 +8,28 @@
             });
         }
     });
+
+    const progressElement = document.getElementById('progress');
+    const tasks_status = document.getElementsByName('status');
+    const tasks_count = tasks_status.length;
+    document.addEventListener('DOMContentLoaded', function() {
+        let done_count = 0;
+        for (const task_status of tasks_status) {
+            if(task_status.textContent === '完了'){
+                done_count++;
+            }
+        }
+        let progress = "";
+        if (tasks_count === 0) {
+            progress = '割り当てられたタスクはありません';
+        } else {
+            progress = '進捗率　' + Math.round(100 * done_count / tasks_count) + '　%';
+        }
+        progressElement.textContent = progress;
+    });
+
+
+
 </script>
 @endsection
 
@@ -80,11 +102,9 @@
                     </div>
                 </div>
                 <div class="flex flex-col px-6">
-                    {{-- @next 進捗率を表示するJS処理の記述 --}}
                     {{-- 進捗率表示 --}}
                     <div class="mx-auto py-6">
-                        <span class="text-5xl font-bold text-green-300">進捗率</span>
-                        <span id="progress" class="text-5xl font-bold text-green-300">%</span>
+                        <span class="text-3xl font-bold text-gray-600" id="progress"></span>
                     </div>
                     {{-- タスク --}}
                     <div class="flex flex-col pb-6 bg-white rounded h-screen overflow-scroll">
@@ -127,7 +147,7 @@
                                             <span>{{ $task->task_category->name }}</span>
                                         </td>
                                         <td class="py-3 px-6 text-left whitespace-nowrap">
-                                            <span>{{ $task->task_status->name }}</span>
+                                            <span name="status">{{ $task->task_status->name }}</span>
                                         </td>
                                     </tr>
                                     @endforeach
