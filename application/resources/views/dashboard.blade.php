@@ -15,18 +15,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         let doneCount = 0;
         for (const taskStatus of tasksStatus) {
-            if(tasksStatus.textContent === '完了'){
+            if(taskStatus.textContent === '完了'){
                 doneCount++;
             }
         }
 
-        let progress = "";
-        if (tasksCount === 0) {
-            progress = '割り当てられたタスクはありません';
-        } else {
-            progress = '進捗率　' + Math.round(100 * doneCount / tasksCount) + '　%';
-        }
-        progressElement.textContent = progress;
+        const progressMessage = tasksCount === 0 ? '割り当てられたタスクはありません'  :  `進捗率　${Math.round(100 * doneCount / tasksCount)}　%`;
+
+        progressElement.textContent = progressMessage;
     });
 </script>
 @endsection
