@@ -38,14 +38,14 @@ class Dashboard extends Controller
             $tasks->leftJoin('users as search_assigner', 'tasks.assigner_id', 'search_assigner.id');
             $tasks->where('tasks.assigner_id', '=', $assigner_id);
         }
-        $tasks = $tasks->get();
+        $filtered_tasks = $tasks->get();
 
         return view('dashboard', [
             'assigners' => $assigners,
             'assigner_id' => $assigner_id,
             'projects' => $projects,
             'searched_project_id' => $project_id,
-            'tasks' => $tasks,
+            'tasks' => $filtered_tasks,
         ]);
     }
 }
