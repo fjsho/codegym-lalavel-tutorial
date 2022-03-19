@@ -5,7 +5,6 @@ module.exports = {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
-        './resources/views/*.blade.php', // @todo 仮記述のため、効果がないと分かれば削除する
     ],
 
     theme: {
