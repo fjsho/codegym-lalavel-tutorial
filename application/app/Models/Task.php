@@ -207,4 +207,30 @@ class Task extends Model
         }
         return $file_path_list;
     }
-}
+
+    /**
+     * プロジェクトと担当者でタスクをフィルタリングする
+     * 成功時：フィルタリング後のタスクを返す
+     * 失敗時：エラーを投げる
+     */
+    public static function getFilteredTasks($assigner_id, $project_id)
+    {
+        $tasks = Task::select(
+            'tasks.*',
+            'tasks.id as key,'
+        )
+            ->with('project');
+
+        if (isset($project_id)) {
+            $tasks->join('projects', 'tasks.project_id', 'projects.id');
+            $tasks->where('project_id', '=', $project_id);
+        }
+
+        if (isset($assigner_id)) {
+            $tasks->leftJoin('users as search_assigner', 'tasks.assigner_id', 'search_assigner.id');
+            $tasks->where('tasks.assigner_id', '=', $assigner_id);
+        }
+
+        $filtered_tasks = $tasks->get();
+        return $filtered_tasks;
+    }}
