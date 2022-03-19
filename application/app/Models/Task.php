@@ -209,9 +209,7 @@ class Task extends Model
     }
 
     /**
-     * プロジェクトと担当者でタスクをフィルタリングする
-     * 成功時：フィルタリング後のタスクを返す
-     * 失敗時：エラーを投げる
+     * 担当者とプロジェクトでタスクをフィルタリングし、フィルタリング後のタスクを返す
      */
     public static function getFilteredTasks($assigner_id, $project_id)
     {
