@@ -249,7 +249,7 @@ function toggleModal(event) {
             <p>{{ __('Please drag and drop a file or paste an image from the clipboard or') }}
                 <label for="file" class="inline-block p-3 border rounded bg-gray-300">{{ __('File Select') }}</label>
                 <input type="file" name="file" id="file" class="hidden">
-            </p>        
+            </p>
         </div>
     </form>
 </x-app-layout>

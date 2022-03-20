@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskPictureController;
 use App\Http\Controllers\TmpPictureController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', Dashboard::class)
+    ->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
 
